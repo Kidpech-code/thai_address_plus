@@ -3,6 +3,7 @@ import 'dart:async' show unawaited;
 import 'package:dio/dio.dart' show CancelToken;
 
 import '../config/thai_geo_config.dart';
+import '../core/api_exception.dart';
 import '../models/autocomplete_hit.dart';
 import '../models/district.dart';
 import '../models/geojson.dart';
@@ -49,7 +50,7 @@ class ThaiGeoApi {
 
   Future<Province> getProvince(String pcode, {CancelToken? cancelToken}) => client.getEnvelope<Province>(
     '/provinces/$pcode',
-    decode: (raw) => Province.fromJson((raw as Map).cast<String, dynamic>()),
+    decode: (raw) => Province.fromJson(_asMap(raw, 'Province')),
     cancelToken: cancelToken,
   );
 
@@ -67,7 +68,7 @@ class ThaiGeoApi {
 
   Future<District> getDistrict(String pcode, {CancelToken? cancelToken}) => client.getEnvelope<District>(
     '/districts/$pcode',
-    decode: (raw) => District.fromJson((raw as Map).cast<String, dynamic>()),
+    decode: (raw) => District.fromJson(_asMap(raw, 'District')),
     cancelToken: cancelToken,
   );
 
@@ -81,7 +82,7 @@ class ThaiGeoApi {
 
   Future<SubDistrict> getSubDistrict(String pcode, {CancelToken? cancelToken}) => client.getEnvelope<SubDistrict>(
     '/sub-districts/$pcode',
-    decode: (raw) => SubDistrict.fromJson((raw as Map).cast<String, dynamic>()),
+    decode: (raw) => SubDistrict.fromJson(_asMap(raw, 'SubDistrict')),
     cancelToken: cancelToken,
   );
 
@@ -118,7 +119,7 @@ class ThaiGeoApi {
 
   Future<Village> getVillage(int mainId, {CancelToken? cancelToken}) => client.getEnvelope<Village>(
     '/villages/$mainId',
-    decode: (raw) => Village.fromJson((raw as Map).cast<String, dynamic>()),
+    decode: (raw) => Village.fromJson(_asMap(raw, 'Village')),
     cancelToken: cancelToken,
   );
 
@@ -135,7 +136,7 @@ class ThaiGeoApi {
   Future<ReverseResult> reverse(double lat, double lng, {CancelToken? cancelToken}) => client.getEnvelope<ReverseResult>(
     '/reverse',
     query: {'lat': lat, 'lng': lng},
-    decode: (raw) => ReverseResult.fromJson((raw as Map).cast<String, dynamic>()),
+    decode: (raw) => ReverseResult.fromJson(_asMap(raw, 'ReverseResult')),
     cancelToken: cancelToken,
   );
 
@@ -250,6 +251,27 @@ class ThaiGeoApi {
   }
 
   // ────────── DECODER HELPERS ──────────
+
+  /// Safely extracts a [Map<String, dynamic>] from [raw].
+  ///
+  /// Handles:
+  /// - `Map<String, dynamic>` — returned as-is
+  /// - `Map` (untyped) — cast to typed
+  /// - `List` with a single Map element — unwraps first item
+  ///   (server returned array for a single-object endpoint)
+  ///
+  /// Throws [GeoApiException] with a clear message for any other shape.
+  static Map<String, dynamic> _asMap(Object? raw, String entityName) {
+    if (raw is Map<String, dynamic>) return raw;
+    if (raw is Map) return raw.cast<String, dynamic>();
+    if (raw is List && raw.isNotEmpty && raw.first is Map) {
+      return (raw.first as Map).cast<String, dynamic>();
+    }
+    throw GeoApiException(
+      code: GeoErrorCode.parse,
+      message: 'Expected JSON object for $entityName but got ${raw?.runtimeType ?? "null"}',
+    );
+  }
 
   static List<E> _list<E>(Object? raw, E Function(Map<String, dynamic>) item) {
     if (raw is! List) return <E>[];

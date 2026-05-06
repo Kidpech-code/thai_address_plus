@@ -1,6 +1,17 @@
+## 0.1.4
+
+* Fix: Replace all unsafe `(raw as Map)` casts in `ThaiGeoApi` with a safe
+  `_asMap(raw, entityName)` helper.
+  * Handles `Map`, untyped `Map`, and single-item `List` (server returning array
+    for a single-object endpoint) gracefully.
+  * Any unexpected shape now throws `GeoApiException(code: parse)` with a
+    descriptive message instead of Dart's raw `_TypeError`.
+  * Affected: `getProvince`, `getDistrict`, `getSubDistrict`, `getVillage`,
+    `reverse`.
+
 ## 0.1.3
 
-* Fix: `ApiEnvelope` now correctly handles `"success": true` (boolean) response
+- Fix: `ApiEnvelope` now correctly handles `"success": true` (boolean) response
   format in addition to `"status": "success"` string format.
 
 ## 0.1.2
