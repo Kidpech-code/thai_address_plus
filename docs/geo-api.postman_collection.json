@@ -1,0 +1,603 @@
+{
+	"info": {
+		"name": "Thailand Geo API — Complete",
+		"description": "Thailand Geographic API ครบทุก endpoint (35 routes)\nBase: https://api.kidpech.app/api/v1/geo\nAuth: ไม่ต้องการ (public, read-only)\nRate limit: 60 req/min/IP (ยกเว้น POST /reverse/batch = 10 req/min)\n\nResponse envelope:\n{ status, message, data }\nยกเว้น GeoJSON/MVT endpoints ที่ส่ง raw spec object โดยตรง",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Provinces (จังหวัด)",
+			"item": [
+				{
+					"name": "List Provinces",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/provinces",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "provinces"],
+							"query": [
+								{ "key": "region", "value": "north", "description": "north | northeast | central | east | west | south", "disabled": true },
+								{ "key": "is_coastal", "value": "true", "description": "เฉพาะจังหวัดชายทะเล", "disabled": true },
+								{ "key": "with_geom", "value": "true", "description": "ส่ง GeoJSON FeatureCollection", "disabled": true },
+								{ "key": "simplified", "value": "true", "description": "ใช้ simplified geometry (default: true)", "disabled": true }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Province by pcode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "provinces", ":pcode"],
+							"variable": [{ "key": "pcode", "value": "TH10", "description": "รหัสจังหวัด เช่น TH10 = กรุงเทพฯ" }]
+						}
+					}
+				},
+				{
+					"name": "List Districts in Province",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/districts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "provinces", ":pcode", "districts"],
+							"variable": [{ "key": "pcode", "value": "TH10" }],
+							"query": [
+								{ "key": "with_geom", "value": "true", "description": "ส่ง GeoJSON FeatureCollection", "disabled": true },
+								{ "key": "simplified", "value": "true", "disabled": true }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Province Neighbors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/neighbors?depth=1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "provinces", ":pcode", "neighbors"],
+							"variable": [{ "key": "pcode", "value": "TH10" }],
+							"query": [{ "key": "depth", "value": "1", "description": "ระดับความลึก 1–3" }]
+						}
+					}
+				},
+				{
+					"name": "Get Province GeoJSON",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/geojson?simplified=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "provinces", ":pcode", "geojson"],
+							"variable": [{ "key": "pcode", "value": "TH10" }],
+							"query": [{ "key": "simplified", "value": "true" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Districts (อำเภอ)",
+			"item": [
+				{
+					"name": "Get District by pcode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/districts/:pcode",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "districts", ":pcode"],
+							"variable": [{ "key": "pcode", "value": "TH1001", "description": "รหัสอำเภอ เช่น TH1001 = พระนคร" }]
+						}
+					}
+				},
+				{
+					"name": "List Sub-districts in District",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/sub-districts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "districts", ":pcode", "sub-districts"],
+							"variable": [{ "key": "pcode", "value": "TH1001" }],
+							"query": [
+								{ "key": "with_geom", "value": "true", "disabled": true },
+								{ "key": "simplified", "value": "true", "disabled": true }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get District Neighbors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/neighbors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "districts", ":pcode", "neighbors"],
+							"variable": [{ "key": "pcode", "value": "TH1001" }]
+						}
+					}
+				},
+				{
+					"name": "Get District GeoJSON",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/geojson",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "districts", ":pcode", "geojson"],
+							"variable": [{ "key": "pcode", "value": "TH1001" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Sub-districts (ตำบล)",
+			"item": [
+				{
+					"name": "Filter Sub-districts (Faceted)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/sub-districts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "sub-districts"],
+							"query": [
+								{ "key": "province", "value": "TH10", "description": "กรองตามจังหวัด", "disabled": true },
+								{ "key": "district", "value": "TH1001", "description": "กรองตามอำเภอ", "disabled": true },
+								{ "key": "is_coastal", "value": "true", "description": "เฉพาะชายทะเล", "disabled": true },
+								{ "key": "is_island", "value": "true", "description": "เฉพาะเกาะ", "disabled": true },
+								{ "key": "max_distance_bkk_km", "value": "50", "description": "รัศมีจากกรุงเทพฯ (km)", "disabled": true },
+								{ "key": "limit", "value": "50", "disabled": true },
+								{ "key": "offset", "value": "0", "disabled": true }
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Sub-district by pcode",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "sub-districts", ":pcode"],
+							"variable": [{ "key": "pcode", "value": "TH100101", "description": "รหัสตำบล" }]
+						}
+					}
+				},
+				{
+					"name": "Get Sub-district Neighbors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/neighbors",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "neighbors"],
+							"variable": [{ "key": "pcode", "value": "TH100101" }]
+						}
+					}
+				},
+				{
+					"name": "Get Sub-district GeoJSON",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/geojson?simplified=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "geojson"],
+							"variable": [{ "key": "pcode", "value": "TH100101" }],
+							"query": [{ "key": "simplified", "value": "true" }]
+						}
+					}
+				},
+				{
+					"name": "List Villages in Sub-district",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/villages",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "villages"],
+							"variable": [{ "key": "pcode", "value": "TH100101" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Other Lookups (zip / region)",
+			"item": [
+				{
+					"name": "Get Sub-districts by ZIP Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/zip/:zip",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "zip", ":zip"],
+							"variable": [{ "key": "zip", "value": "10200", "description": "รหัสไปรษณีย์ 5 หลัก" }]
+						}
+					}
+				},
+				{
+					"name": "List Provinces by Region",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/regions/:region",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "regions", ":region"],
+							"variable": [{ "key": "region", "value": "north", "description": "north | northeast | central | east | west | south" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Reverse Geocode (แปลงพิกัด)",
+			"item": [
+				{
+					"name": "Reverse Geocode (Single Point)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/reverse?lat=13.7563&lng=100.5018",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "reverse"],
+							"query": [
+								{ "key": "lat", "value": "13.7563", "description": "ละติจูด" },
+								{ "key": "lng", "value": "100.5018", "description": "ลองจิจูด" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Reverse Geocode Batch (POST ≤ 1000 points)",
+					"request": {
+						"method": "POST",
+						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  { \"lng\": 100.5018, \"lat\": 13.7563 },\n  { \"lng\": 98.9853,  \"lat\": 18.7883 },\n  { \"lng\": 102.8339, \"lat\": 16.4419 }\n]"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/reverse/batch",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "reverse", "batch"]
+						},
+						"description": "Rate-limited: 10 req/min/IP. รับสูงสุด 1,000 จุดต่อ request (~80–150 ms)"
+					}
+				},
+				{
+					"name": "Get Area (Reverse + Boundary in 1 Round-trip)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=sub_district&simplified=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "areas"],
+							"query": [
+								{ "key": "lat", "value": "13.7563" },
+								{ "key": "lng", "value": "100.5018" },
+								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district" },
+								{ "key": "simplified", "value": "true" }
+							]
+						},
+						"description": "สำหรับ map tap: reverse geocode + boundary polygon ใน 1 round-trip"
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Search & Autocomplete",
+			"item": [
+				{
+					"name": "Search (Trigram Fuzzy)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/search?q=บางรัก&limit=10",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "search"],
+							"query": [
+								{ "key": "q", "value": "บางรัก", "description": "คำค้นหา (ขั้นต่ำ 2 ตัวอักษร, สูงสุด 50 ผล)" },
+								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district", "disabled": true },
+								{ "key": "lang", "value": "th", "description": "th | en", "disabled": true },
+								{ "key": "limit", "value": "10" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Autocomplete (Prefix Typeahead)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/autocomplete?q=บาง&limit=8",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "autocomplete"],
+							"query": [
+								{ "key": "q", "value": "บาง" },
+								{ "key": "level", "value": "sub_district", "disabled": true },
+								{ "key": "lang", "value": "th", "disabled": true },
+								{ "key": "limit", "value": "8" }
+							]
+						},
+						"description": "Prefix typeahead, cache 5 min. ใช้ debounce 200–300ms ฝั่ง client"
+					}
+				},
+				{
+					"name": "Find (pcode / zip / ชื่อ → GeoJSON FeatureCollection)",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/find?q=บางรัก&simplified=true&limit=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "find"],
+							"query": [
+								{ "key": "q", "value": "บางรัก", "description": "pcode / zip / ชื่อ" },
+								{ "key": "simplified", "value": "true" },
+								{ "key": "limit", "value": "5" }
+							]
+						},
+						"description": "ตอบ raw GeoJSON FeatureCollection (ไม่มี envelope)"
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Spatial (เชิงพื้นที่)",
+			"item": [
+				{
+					"name": "Search Within Radius",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=10&level=sub_district&limit=50",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "within"],
+							"query": [
+								{ "key": "lat", "value": "13.7563" },
+								{ "key": "lng", "value": "100.5018" },
+								{ "key": "radius_km", "value": "10", "description": "รัศมี 1–200 km" },
+								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district" },
+								{ "key": "limit", "value": "50" }
+							]
+						}
+					}
+				},
+				{
+					"name": "Search by Bounding Box",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/bbox?minLng=100.4&minLat=13.6&maxLng=100.6&maxLat=13.9&level=sub_district&limit=100",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "bbox"],
+							"query": [
+								{ "key": "minLng", "value": "100.4" },
+								{ "key": "minLat", "value": "13.6" },
+								{ "key": "maxLng", "value": "100.6" },
+								{ "key": "maxLat", "value": "13.9" },
+								{ "key": "level", "value": "sub_district" },
+								{ "key": "limit", "value": "100" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Map Data (GeoJSON & Vector Tiles)",
+			"item": [
+				{
+					"name": "Get Thailand Country Outline",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/country?simplified=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "country"],
+							"query": [{ "key": "simplified", "value": "true", "description": "~50 KB" }]
+						},
+						"description": "GeoJSON Feature ขอบเขตประเทศไทย, cache 24h immutable"
+					}
+				},
+				{
+					"name": "Get Whole-level FeatureCollection",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/geojson/:level",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "geojson", ":level"],
+							"variable": [{ "key": "level", "value": "province", "description": "province | district | sub_district" }]
+						},
+						"description": "GeoJSON FeatureCollection ทั้งประเทศ (heavy). แนะนำ cache ใน IndexedDB"
+					}
+				},
+				{
+					"name": "Get Vector Tile (MVT)",
+					"request": {
+						"method": "GET",
+						"header": [{ "key": "Accept", "value": "application/vnd.mapbox-vector-tile" }],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/tiles/:level/:z/:x/:y",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "tiles", ":level", ":z", ":x", ":y"],
+							"variable": [
+								{ "key": "level", "value": "province", "description": "province | district | sub_district" },
+								{ "key": "z", "value": "10" },
+								{ "key": "x", "value": "785" },
+								{ "key": "y", "value": "472" }
+							]
+						},
+						"description": "Mapbox Vector Tile (binary), cache 12h immutable. TileJSON pattern: /tiles/{level}/{z}/{x}/{y}.mvt"
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Villages (หมู่บ้าน)",
+			"item": [
+				{
+					"name": "Get Village by main_id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/villages/:main_id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "villages", ":main_id"],
+							"variable": [{ "key": "main_id", "value": "100101001", "description": "รหัสหมู่บ้าน" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "10. Hospitals (โรงพยาบาล)",
+			"item": [
+				{
+					"name": "List Hospitals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/hospitals?keyword=ศิริราช",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "hospitals"],
+							"query": [{ "key": "keyword", "value": "ศิริราช", "description": "ค้นหาชื่อโรงพยาบาล" }]
+						}
+					}
+				},
+				{
+					"name": "Get Hospital by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/hospitals/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "hospitals", ":id"],
+							"variable": [{ "key": "id", "value": "10669" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "11. Postal Codes & Special Admin Zones",
+			"item": [
+				{
+					"name": "Get Area by Postal Code",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/postal-codes/:zip",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "postal-codes", ":zip"],
+							"variable": [{ "key": "zip", "value": "10200", "description": "รหัสไปรษณีย์ 5 หลัก" }]
+						}
+					}
+				},
+				{
+					"name": "Get Special Admin Zone",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/special-admin-zones/:code",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "special-admin-zones", ":code"],
+							"variable": [{ "key": "code", "value": "BKK", "description": "BKK = กรุงเทพฯ | PATTAYA = พัทยา" }]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "12. Stats & OpenAPI",
+			"item": [
+				{
+					"name": "Get Dataset Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "stats"]
+						},
+						"description": "สถิติชุดข้อมูล: จำนวน provinces / districts / sub-districts / villages (cache 6h)"
+					}
+				},
+				{
+					"name": "Get OpenAPI Spec (YAML)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/openapi.yaml",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "openapi.yaml"]
+						}
+					}
+				},
+				{
+					"name": "Get OpenAPI Spec (JSON)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/openapi.json",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "geo", "openapi.json"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://api.kidpech.app",
+			"type": "string"
+		}
+	]
+}

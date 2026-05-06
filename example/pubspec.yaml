@@ -1,0 +1,22 @@
+name: thai_address_plus_example
+description: Demo app for thai_address_plus.
+publish_to: "none"
+version: 0.0.1
+
+environment:
+  sdk: ^3.4.0
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  thai_address_plus:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
