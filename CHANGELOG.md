@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Tighten dependency lower bounds (`dio ^5.9.2`, `meta ^1.16.0`) to pass pub.dev downgrade analysis.
+
 ## 0.1.0
 
 ### Features
