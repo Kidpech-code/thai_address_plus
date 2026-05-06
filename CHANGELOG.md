@@ -1,3 +1,8 @@
+## 0.1.3
+
+* Fix: `ApiEnvelope` now correctly handles `"success": true` (boolean) response
+  format in addition to `"status": "success"` string format.
+
 ## 0.1.2
 
 - Fix: `ApiEnvelope.isSuccess` now accepts `status: "ok"` in addition to `"success"`,

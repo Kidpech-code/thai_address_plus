@@ -17,13 +17,21 @@ class ApiEnvelope<T> {
   final String? errorCode;
   final String? errorMessage;
 
-  bool get isSuccess => status == 'success' || status == 'ok';
+  bool get isSuccess => status == 'success' || status == 'ok' || status == 'true';
 
   /// แกะ envelope ทั่วไป โดย caller จะ map `data` เองภายหลัง.
   factory ApiEnvelope.fromJson(Map<String, dynamic> json, T Function(Object? raw)? mapData) {
     final err = json['error'];
+    // Server อาจส่ง success เป็น bool (true/false) หรือ string ("success"/"ok")
+    final rawSuccess = json['success'];
+    final String status;
+    if (rawSuccess is bool) {
+      status = rawSuccess ? 'true' : 'false';
+    } else {
+      status = (json['status'] ?? '').toString();
+    }
     return ApiEnvelope<T>(
-      status: (json['status'] ?? '').toString(),
+      status: status,
       message: (json['message'] ?? '').toString(),
       data: (mapData != null && json['data'] != null) ? mapData(json['data']) : json['data'] as T?,
       errorCode: err is Map ? err['code']?.toString() : null,
