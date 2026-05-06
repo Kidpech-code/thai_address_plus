@@ -17,7 +17,7 @@ class ApiEnvelope<T> {
   final String? errorCode;
   final String? errorMessage;
 
-  bool get isSuccess => status == 'success';
+  bool get isSuccess => status == 'success' || status == 'ok';
 
   /// แกะ envelope ทั่วไป โดย caller จะ map `data` เองภายหลัง.
   factory ApiEnvelope.fromJson(Map<String, dynamic> json, T Function(Object? raw)? mapData) {

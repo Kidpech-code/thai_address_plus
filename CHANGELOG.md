@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Fix: `ApiEnvelope.isSuccess` now accepts `status: "ok"` in addition to `"success"`,
+  resolving `[UNKNOWN] ok` errors on all API calls.
+
 ## 0.1.1
 
 - Tighten dependency lower bounds (`dio ^5.9.2`, `meta ^1.16.0`) to pass pub.dev downgrade analysis.
