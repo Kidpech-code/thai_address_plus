@@ -31,13 +31,23 @@ class Village {
   factory Village.fromJson(Map<String, dynamic> j) {
     final moo = j['moo_number'] ?? j['moo'];
     return Village(
-      mainId: j['main_id'] is num ? (j['main_id'] as num).toInt() : int.tryParse(j['main_id']?.toString() ?? ''),
-      subDistrictPcode: (j['sub_district_pcode'] ?? j['subdistrict_pcode'] ?? j['pcode'] ?? '').toString(),
+      mainId: j['main_id'] is num
+          ? (j['main_id'] as num).toInt()
+          : int.tryParse(j['main_id']?.toString() ?? ''),
+      subDistrictPcode: (j['sub_district_pcode'] ??
+              j['subdistrict_pcode'] ??
+              j['pcode'] ??
+              '')
+          .toString(),
       nameTh: (j['name_th'] ?? '').toString(),
       nameEn: (j['name_en'] ?? '').toString(),
       mooNumber: moo is num ? moo.toInt() : int.tryParse(moo?.toString() ?? ''),
-      lat: (j['lat'] as num?)?.toDouble() ?? (j['centroid_lat'] as num?)?.toDouble() ?? 0,
-      lng: (j['lng'] as num?)?.toDouble() ?? (j['centroid_lng'] as num?)?.toDouble() ?? 0,
+      lat: (j['lat'] as num?)?.toDouble() ??
+          (j['centroid_lat'] as num?)?.toDouble() ??
+          0,
+      lng: (j['lng'] as num?)?.toDouble() ??
+          (j['centroid_lng'] as num?)?.toDouble() ??
+          0,
     );
   }
 }

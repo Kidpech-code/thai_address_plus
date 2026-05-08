@@ -87,7 +87,11 @@ class _ThaiAddressSearchFieldState extends State<ThaiAddressSearchField> {
     final ct = CancelToken();
     _cancelToken = ct;
     try {
-      final hits = await widget.api.autocomplete(q.trim(), level: widget.level, lang: widget.lang, limit: widget.limit, cancelToken: ct);
+      final hits = await widget.api.autocomplete(q.trim(),
+          level: widget.level,
+          lang: widget.lang,
+          limit: widget.limit,
+          cancelToken: ct);
       // ตรวจซ้ำหลัง await เพื่อกัน race จาก request ที่ใช้เวลานาน
       return mySeq == _seq ? hits : const [];
     } on GeoApiException catch (e) {
@@ -109,8 +113,7 @@ class _ThaiAddressSearchFieldState extends State<ThaiAddressSearchField> {
           controller: controller,
           focusNode: focusNode,
           onSubmitted: (_) => onFieldSubmitted(),
-          decoration:
-              widget.decoration ??
+          decoration: widget.decoration ??
               const InputDecoration(
                 hintText: 'ค้นหาที่อยู่ (จังหวัด/อำเภอ/ตำบล/รหัสไปรษณีย์)',
                 prefixIcon: Icon(Icons.search),
@@ -136,7 +139,9 @@ class _ThaiAddressSearchFieldState extends State<ThaiAddressSearchField> {
                     dense: true,
                     leading: const Icon(Icons.place_outlined),
                     title: Text(h.displayTh),
-                    subtitle: Text([h.level, if (h.zipCode != null) h.zipCode].join(' • '), style: const TextStyle(fontSize: 11)),
+                    subtitle: Text(
+                        [h.level, if (h.zipCode != null) h.zipCode].join(' • '),
+                        style: const TextStyle(fontSize: 11)),
                     onTap: () => onSelected(h),
                   );
                 },

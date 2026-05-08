@@ -1,12 +1,32 @@
+# Changelog
+
+All notable changes to this package will be documented in this file.
+
+## 1.0.0
+
+### Stable release
+
+- First stable release of `thai_address_plus` for production Flutter apps that consume the Thailand Geographic API.
+
+### Documentation and tooling
+
+- Add a ready-to-import Postman collection at `docs/geo-api.postman_collection.json` so users can call the API directly outside Flutter.
+- Refresh `README.md` with a screenshot gallery, `^1.0.0` installation instructions, and clearer links to the API guide, OpenAPI spec, and hosted docs.
+
+### Package metadata
+
+- Update `pubspec.yaml` to version `1.0.0`.
+- Add pub.dev screenshots, topics, and documentation metadata for a more complete package listing.
+
 ## 0.1.4
 
-* Fix: Replace all unsafe `(raw as Map)` casts in `ThaiGeoApi` with a safe
+- Fix: Replace all unsafe `(raw as Map)` casts in `ThaiGeoApi` with a safe
   `_asMap(raw, entityName)` helper.
-  * Handles `Map`, untyped `Map`, and single-item `List` (server returning array
+  - Handles `Map`, untyped `Map`, and single-item `List` (server returning array
     for a single-object endpoint) gracefully.
-  * Any unexpected shape now throws `GeoApiException(code: parse)` with a
+  - Any unexpected shape now throws `GeoApiException(code: parse)` with a
     descriptive message instead of Dart's raw `_TypeError`.
-  * Affected: `getProvince`, `getDistrict`, `getSubDistrict`, `getVillage`,
+  - Affected: `getProvince`, `getDistrict`, `getSubDistrict`, `getVillage`,
     `reverse`.
 
 ## 0.1.3

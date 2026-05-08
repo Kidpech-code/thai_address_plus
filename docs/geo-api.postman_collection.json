@@ -1,594 +1,4619 @@
 {
 	"info": {
 		"name": "Thailand Geo API — Complete",
-		"description": "Thailand Geographic API ครบทุก endpoint (35 routes)\nBase: https://api.kidpech.app/api/v1/geo\nAuth: ไม่ต้องการ (public, read-only)\nRate limit: 60 req/min/IP (ยกเว้น POST /reverse/batch = 10 req/min)\n\nResponse envelope:\n{ status, message, data }\nยกเว้น GeoJSON/MVT endpoints ที่ส่ง raw spec object โดยตรง",
+		"description": "Thailand Geographic API ครบทุก endpoint (35 routes)\nBase: https://api.kidpech.app/api/v1/geo\nAuth: ไม่ต้องการ (public, read-only)\nRate limit: 60 req/min/IP (ยกเว้น POST /reverse/batch = 10 req/min)\n\nSuggested reading order:\n1) Core hierarchy -> 2) Reverse/Search -> 3) Spatial/Map -> 4) Reference data -> 5) Schemas\n\nResponse envelope:\n{ status, message, data }\nยกเว้น GeoJSON/MVT/OpenAPI endpoints ที่ส่ง raw spec object หรือ schema โดยตรง",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "1. Provinces (จังหวัด)",
+			"name": "1. Core Hierarchy: Provinces (จังหวัด)",
+			"description": "เริ่มต้นจากระดับจังหวัดเมื่ออยากได้รายการ 77 จังหวัด, lookup ตาม pcode, จังหวัดข้างเคียง และ GeoJSON boundary",
 			"item": [
 				{
 					"name": "List Provinces",
+					"description": "ดูรายการจังหวัดทั้งหมด 77 จังหวัด หรือกรองด้วย region, is_coastal, with_geom, simplified. ค่าที่ควรลอง: region=north, is_coastal=true, with_geom=true",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/provinces",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "provinces"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"provinces"
+							],
 							"query": [
-								{ "key": "region", "value": "north", "description": "north | northeast | central | east | west | south", "disabled": true },
-								{ "key": "is_coastal", "value": "true", "description": "เฉพาะจังหวัดชายทะเล", "disabled": true },
-								{ "key": "with_geom", "value": "true", "description": "ส่ง GeoJSON FeatureCollection", "disabled": true },
-								{ "key": "simplified", "value": "true", "description": "ใช้ simplified geometry (default: true)", "disabled": true }
+								{
+									"key": "region",
+									"value": "north",
+									"description": "north | northeast | central | east | west | south",
+									"disabled": true
+								},
+								{
+									"key": "is_coastal",
+									"value": "true",
+									"description": "เฉพาะจังหวัดชายทะเล",
+									"disabled": true
+								},
+								{
+									"key": "with_geom",
+									"value": "true",
+									"description": "รวม geometry (GeoJSON Feature per province)",
+									"disabled": true
+								},
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "ใช้ simplified geometry (default: true)",
+									"disabled": true
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — All Provinces",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH10\",\n      \"name_th\": \"กรุงเทพมหานคร\",\n      \"name_en\": \"Bangkok\",\n      \"region\": \"central\",\n      \"area_sqkm\": 1571.3713633882228,\n      \"centroid_lng\": 100.6030293111107,\n      \"centroid_lat\": 13.72436412050007,\n      \"bbox_min_lng\": 100.32791238700014,\n      \"bbox_min_lat\": 13.493389571000023,\n      \"bbox_max_lng\": 100.93851625700017,\n      \"bbox_max_lat\": 13.955198179000092,\n      \"distance_to_bangkok_km\": 0,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-10\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"central\",\n      \"region_9_th\": \"ภาคกลาง\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": true,\n      \"admin_type\": \"special\",\n      \"governance\": \"bma\"\n    },\n    {\n      \"pcode\": \"TH11\",\n      \"name_th\": \"สมุทรปราการ\",\n      \"name_en\": \"Samut Prakan\",\n      \"region\": \"central\",\n      \"area_sqkm\": 949.0011125136053,\n      \"centroid_lng\": 100.71966990874414,\n      \"centroid_lat\": 13.598305425500087,\n      \"bbox_min_lng\": 100.44445445100007,\n      \"bbox_min_lat\": 13.478420328000027,\n      \"bbox_max_lng\": 100.96388387000007,\n      \"bbox_max_lat\": 13.718189041000187,\n      \"distance_to_bangkok_km\": 18.80845837818,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-11\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"central\",\n      \"region_9_th\": \"ภาคกลาง\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": true,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH12\",\n      \"name_th\": \"นนทบุรี\",\n      \"name_en\": \"Nonthaburi\",\n      \"region\": \"central\",\n      \"area_sqkm\": 636.542903636959,\n      \"centroid_lng\": 100.38395192374945,\n      \"centroid_lat\": 13.964595601500093,\n      \"bbox_min_lng\": 100.26242900800014,\n      \"bbox_min_lat\": 13.788917403000028,\n      \"bbox_max_lng\": 100.56754835800007,\n      \"bbox_max_lat\": 14.140245520000121,\n      \"distance_to_bangkok_km\": 35.59973272508,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-12\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"central\",\n      \"region_9_th\": \"ภาคกลาง\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": true,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    \"...(74 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Region=north",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces?region=north",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces"
+									],
+									"query": [
+										{
+											"key": "region",
+											"value": "north"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH50\",\n      \"name_th\": \"เชียงใหม่\",\n      \"name_en\": \"Chiang Mai\",\n      \"region\": \"north\",\n      \"area_sqkm\": 22176.03710791237,\n      \"centroid_lng\": 98.61875253339463,\n      \"centroid_lat\": 18.695048585500103,\n      \"bbox_min_lng\": 98.008039053,\n      \"bbox_min_lat\": 17.242274746000078,\n      \"bbox_max_lng\": 99.57291340000012,\n      \"bbox_max_lat\": 20.147855699000047,\n      \"distance_to_bangkok_km\": 589.53111626852,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-50\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH51\",\n      \"name_th\": \"ลำพูน\",\n      \"name_en\": \"Lamphun\",\n      \"region\": \"north\",\n      \"area_sqkm\": 4482.899998109015,\n      \"centroid_lng\": 98.93979955561129,\n      \"centroid_lat\": 18.06691694550011,\n      \"bbox_min_lng\": 98.67082153900009,\n      \"bbox_min_lat\": 17.425651825000102,\n      \"bbox_max_lng\": 99.32154337100002,\n      \"bbox_max_lat\": 18.708365699000126,\n      \"distance_to_bangkok_km\": 512.46775858676,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-51\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"secondary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH52\",\n      \"name_th\": \"ลำปาง\",\n      \"name_en\": \"Lampang\",\n      \"region\": \"north\",\n      \"area_sqkm\": 12496.449174280891,\n      \"centroid_lng\": 99.52458636407992,\n      \"centroid_lat\": 18.31174517350007,\n      \"bbox_min_lng\": 98.8800492100001,\n      \"bbox_min_lat\": 17.20547338500006,\n      \"bbox_max_lng\": 100.12599415200009,\n      \"bbox_max_lat\": 19.417657702000042,\n      \"distance_to_bangkok_km\": 520.58427261629,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-52\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"secondary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    \"...(6 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — is_coastal=true",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces?is_coastal=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces"
+									],
+									"query": [
+										{
+											"key": "is_coastal",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH10\",\n      \"name_th\": \"กรุงเทพมหานคร\",\n      \"name_en\": \"Bangkok\",\n      \"region\": \"central\",\n      \"area_sqkm\": 1571.3713633882228,\n      \"centroid_lng\": 100.6030293111107,\n      \"centroid_lat\": 13.72436412050007,\n      \"bbox_min_lng\": 100.32791238700014,\n      \"bbox_min_lat\": 13.493389571000023,\n      \"bbox_max_lng\": 100.93851625700017,\n      \"bbox_max_lat\": 13.955198179000092,\n      \"distance_to_bangkok_km\": 0,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-10\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"central\",\n      \"region_9_th\": \"ภาคกลาง\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": true,\n      \"admin_type\": \"special\",\n      \"governance\": \"bma\"\n    },\n    {\n      \"pcode\": \"TH11\",\n      \"name_th\": \"สมุทรปราการ\",\n      \"name_en\": \"Samut Prakan\",\n      \"region\": \"central\",\n      \"area_sqkm\": 949.0011125136053,\n      \"centroid_lng\": 100.71966990874414,\n      \"centroid_lat\": 13.598305425500087,\n      \"bbox_min_lng\": 100.44445445100007,\n      \"bbox_min_lat\": 13.478420328000027,\n      \"bbox_max_lng\": 100.96388387000007,\n      \"bbox_max_lat\": 13.718189041000187,\n      \"distance_to_bangkok_km\": 18.80845837818,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-11\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"central\",\n      \"region_9_th\": \"ภาคกลาง\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": true,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH20\",\n      \"name_th\": \"ชลบุรี\",\n      \"name_en\": \"Chon Buri\",\n      \"region\": \"east\",\n      \"area_sqkm\": 4504.7636023578325,\n      \"centroid_lng\": 101.22464076662683,\n      \"centroid_lat\": 13.092150489500085,\n      \"bbox_min_lng\": 100.64680615700007,\n      \"bbox_min_lat\": 12.507871481000166,\n      \"bbox_max_lng\": 101.71972020100009,\n      \"bbox_max_lat\": 13.589319000999978,\n      \"distance_to_bangkok_km\": 97.08037426662,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-20\",\n      \"region_4\": \"central\",\n      \"region_4_th\": \"ภาคกลาง\",\n      \"region_9\": \"east\",\n      \"region_9_th\": \"ภาคตะวันออก\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    \"...(20 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Province by pcode",
+					"description": "ดูรายละเอียดจังหวัดเดียวตาม pcode. ลอง TH10, TH50 หรือ TH83 เพื่อเช็กชื่อ พื้นที่ centroid และ bbox",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "provinces", ":pcode"],
-							"variable": [{ "key": "pcode", "value": "TH10", "description": "รหัสจังหวัด เช่น TH10 = กรุงเทพฯ" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"provinces",
+								":pcode"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH10",
+									"description": "รหัสจังหวัด เช่น TH10=กรุงเทพฯ | TH50=เชียงใหม่ | TH83=ภูเก็ต"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH10 กรุงเทพฯ",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH10",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"pcode\": \"TH10\",\n    \"name_th\": \"กรุงเทพมหานคร\",\n    \"name_en\": \"Bangkok\",\n    \"region\": \"central\",\n    \"area_sqkm\": 1571.3713633882228,\n    \"centroid_lng\": 100.6030293111107,\n    \"centroid_lat\": 13.72436412050007,\n    \"bbox_min_lng\": 100.32791238700014,\n    \"bbox_min_lat\": 13.493389571000023,\n    \"bbox_max_lng\": 100.93851625700017,\n    \"bbox_max_lat\": 13.955198179000092,\n    \"distance_to_bangkok_km\": 0,\n    \"is_coastal\": true,\n    \"iso_3166_2\": \"TH-10\",\n    \"region_4\": \"central\",\n    \"region_4_th\": \"ภาคกลาง\",\n    \"region_9\": \"central\",\n    \"region_9_th\": \"ภาคกลาง\",\n    \"tourism_tier\": \"primary\",\n    \"is_bmr\": true,\n    \"admin_type\": \"special\",\n    \"governance\": \"bma\"\n  }\n}"
+						},
+						{
+							"name": "200 — TH50 เชียงใหม่",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH50",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH50"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"pcode\": \"TH50\",\n    \"name_th\": \"เชียงใหม่\",\n    \"name_en\": \"Chiang Mai\",\n    \"region\": \"north\",\n    \"area_sqkm\": 22176.03710791237,\n    \"centroid_lng\": 98.61875253339463,\n    \"centroid_lat\": 18.695048585500103,\n    \"bbox_min_lng\": 98.008039053,\n    \"bbox_min_lat\": 17.242274746000078,\n    \"bbox_max_lng\": 99.57291340000012,\n    \"bbox_max_lat\": 20.147855699000047,\n    \"distance_to_bangkok_km\": 589.53111626852,\n    \"is_coastal\": false,\n    \"iso_3166_2\": \"TH-50\",\n    \"region_4\": \"north\",\n    \"region_4_th\": \"ภาคเหนือ\",\n    \"region_9\": \"north_upper\",\n    \"region_9_th\": \"ภาคเหนือตอนบน\",\n    \"tourism_tier\": \"primary\",\n    \"is_bmr\": false,\n    \"admin_type\": \"province\",\n    \"governance\": \"pao\"\n  }\n}"
+						},
+						{
+							"name": "404 — Invalid pcode: TH99",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH99",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH99"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "List Districts in Province",
+					"description": "ดูอำเภอทั้งหมดภายใต้จังหวัดเดียว. ถ้าจะใช้ทำ drill-down บนแผนที่ให้ลอง with_geom=true หรือ simplified=false",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/districts",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "provinces", ":pcode", "districts"],
-							"variable": [{ "key": "pcode", "value": "TH10" }],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"provinces",
+								":pcode",
+								"districts"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH10",
+									"description": "รหัสจังหวัด"
+								}
+							],
 							"query": [
-								{ "key": "with_geom", "value": "true", "description": "ส่ง GeoJSON FeatureCollection", "disabled": true },
-								{ "key": "simplified", "value": "true", "disabled": true }
+								{
+									"key": "with_geom",
+									"value": "true",
+									"description": "รวม GeoJSON geometry",
+									"disabled": true
+								},
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "ใช้ simplified geometry",
+									"disabled": true
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Districts in TH10",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH10/districts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode",
+										"districts"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH1001\",\n      \"province_pcode\": \"TH10\",\n      \"name_th\": \"พระนคร\",\n      \"name_en\": \"Phra Nakhon\",\n      \"area_sqkm\": 5.389902350756957,\n      \"centroid_lng\": 100.49688332097816,\n      \"centroid_lat\": 13.755671977000105,\n      \"bbox_min_lng\": 100.48764453700016,\n      \"bbox_min_lat\": 13.738632557000017,\n      \"bbox_max_lng\": 100.5093992460001,\n      \"bbox_max_lat\": 13.77266572700006,\n      \"distance_to_bangkok_km\": 11.99132056734,\n      \"is_coastal\": false\n    },\n    {\n      \"pcode\": \"TH1002\",\n      \"province_pcode\": \"TH10\",\n      \"name_th\": \"ดุสิต\",\n      \"name_en\": \"Dusit\",\n      \"area_sqkm\": 11.3679683249563,\n      \"centroid_lng\": 100.51462590889332,\n      \"centroid_lat\": 13.776478611500124,\n      \"bbox_min_lng\": 100.49903981300014,\n      \"bbox_min_lat\": 13.752637297000092,\n      \"bbox_max_lng\": 100.5374242760002,\n      \"bbox_max_lat\": 13.800358098000117,\n      \"distance_to_bangkok_km\": 11.16481318362,\n      \"is_coastal\": false\n    },\n    {\n      \"pcode\": \"TH1003\",\n      \"province_pcode\": \"TH10\",\n      \"name_th\": \"หนองจอก\",\n      \"name_en\": \"Nong Chok\",\n      \"area_sqkm\": 237.51662248276102,\n      \"centroid_lng\": 100.85823444942508,\n      \"centroid_lat\": 13.842265902500003,\n      \"bbox_min_lng\": 100.78742159600012,\n      \"bbox_min_lat\": 13.737877175000051,\n      \"bbox_max_lng\": 100.93851625700017,\n      \"bbox_max_lat\": 13.946490894000078,\n      \"distance_to_bangkok_km\": 30.524078574489998,\n      \"is_coastal\": false\n    },\n    \"...(47 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Province Neighbors",
+					"description": "ดูจังหวัดที่มีพรมแดนติดกันตาม pcode. เพิ่ม depth=2 หรือ depth=3 เพื่อดูเพื่อนบ้านหลายชั้น",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/neighbors?depth=1",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "provinces", ":pcode", "neighbors"],
-							"variable": [{ "key": "pcode", "value": "TH10" }],
-							"query": [{ "key": "depth", "value": "1", "description": "ระดับความลึก 1–3" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"provinces",
+								":pcode",
+								"neighbors"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH10",
+									"description": "รหัสจังหวัด"
+								}
+							],
+							"query": [
+								{
+									"key": "depth",
+									"value": "1",
+									"description": "ระดับความลึก 1–3 (depth=2 = เพื่อนบ้านของเพื่อนบ้าน)"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH10 neighbors depth=1",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH10/neighbors?depth=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode",
+										"neighbors"
+									],
+									"query": [
+										{
+											"key": "depth",
+											"value": "1"
+										}
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH11\",\n      \"name_th\": \"สมุทรปราการ\",\n      \"name_en\": \"Samut Prakan\",\n      \"level\": \"province\"\n    },\n    {\n      \"pcode\": \"TH12\",\n      \"name_th\": \"นนทบุรี\",\n      \"name_en\": \"Nonthaburi\",\n      \"level\": \"province\"\n    },\n    {\n      \"pcode\": \"TH13\",\n      \"name_th\": \"ปทุมธานี\",\n      \"name_en\": \"Pathum Thani\",\n      \"level\": \"province\"\n    },\n    \"...(3 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — TH50 neighbors depth=2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH50/neighbors?depth=2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode",
+										"neighbors"
+									],
+									"query": [
+										{
+											"key": "depth",
+											"value": "2"
+										}
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH50"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH51\",\n      \"name_th\": \"ลำพูน\",\n      \"name_en\": \"Lamphun\",\n      \"level\": \"province\"\n    },\n    {\n      \"pcode\": \"TH52\",\n      \"name_th\": \"ลำปาง\",\n      \"name_en\": \"Lampang\",\n      \"level\": \"province\"\n    },\n    {\n      \"pcode\": \"TH54\",\n      \"name_th\": \"แพร่\",\n      \"name_en\": \"Phrae\",\n      \"level\": \"province\"\n    },\n    \"...(9 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Province GeoJSON",
+					"description": "ดึงขอบเขตจังหวัดเป็น raw GeoJSON สำหรับ map layer. ใช้ simplified=true สำหรับ preview และ simplified=false เมื่อต้องการเส้นขอบละเอียด",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/provinces/:pcode/geojson?simplified=true",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "provinces", ":pcode", "geojson"],
-							"variable": [{ "key": "pcode", "value": "TH10" }],
-							"query": [{ "key": "simplified", "value": "true" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"provinces",
+								":pcode",
+								"geojson"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH10"
+								}
+							],
+							"query": [
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "true=ขนาดเล็ก ~50 KB | false=full detail"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH10 GeoJSON simplified",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/provinces/TH10/geojson?simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"provinces",
+										":pcode",
+										"geojson"
+									],
+									"query": [
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH10"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": \"[...coordinates omitted for brevity...]\"\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "2. Districts (อำเภอ)",
+			"name": "2. Core Hierarchy: Districts (อำเภอ)",
+			"description": "ใช้ drill-down จากจังหวัดลงสู่อำเภอ หรือ lookup อำเภอรายตัวพร้อม neighbors และ GeoJSON",
 			"item": [
 				{
 					"name": "Get District by pcode",
+					"description": "ดูรายละเอียดอำเภอเดียวตาม pcode. ลอง TH1001 หรือ TH5001 เพื่อเช็กชื่อ พื้นที่ centroid และ bbox",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/districts/:pcode",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "districts", ":pcode"],
-							"variable": [{ "key": "pcode", "value": "TH1001", "description": "รหัสอำเภอ เช่น TH1001 = พระนคร" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"districts",
+								":pcode"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH1001",
+									"description": "รหัสอำเภอ TH[จังหวัด][อำเภอ] เช่น TH1001=พระนคร | TH5001=เมืองเชียงใหม่"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH1001 พระนคร",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/districts/TH1001",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"districts",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH1001"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"pcode\": \"TH1001\",\n    \"province_pcode\": \"TH10\",\n    \"name_th\": \"พระนคร\",\n    \"name_en\": \"Phra Nakhon\",\n    \"area_sqkm\": 5.389902350756957,\n    \"centroid_lng\": 100.49688332097816,\n    \"centroid_lat\": 13.755671977000105,\n    \"bbox_min_lng\": 100.48764453700016,\n    \"bbox_min_lat\": 13.738632557000017,\n    \"bbox_max_lng\": 100.5093992460001,\n    \"bbox_max_lat\": 13.77266572700006,\n    \"distance_to_bangkok_km\": 11.99132056734,\n    \"is_coastal\": false\n  }\n}"
+						},
+						{
+							"name": "404 — Invalid pcode: TH9999",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/districts/TH9999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"districts",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH9999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "List Sub-districts in District",
+					"description": "ดูตำบลทั้งหมดภายใต้อำเภอเดียว. ใช้ with_geom=true เมื่อต้อง render polygon หรือ simplified=true สำหรับ payload เบา",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/sub-districts",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "districts", ":pcode", "sub-districts"],
-							"variable": [{ "key": "pcode", "value": "TH1001" }],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"districts",
+								":pcode",
+								"sub-districts"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH1001"
+								}
+							],
 							"query": [
-								{ "key": "with_geom", "value": "true", "disabled": true },
-								{ "key": "simplified", "value": "true", "disabled": true }
+								{
+									"key": "with_geom",
+									"value": "true",
+									"description": "รวม GeoJSON geometry",
+									"disabled": true
+								},
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "ใช้ simplified geometry",
+									"disabled": true
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Sub-districts in TH1001",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/districts/TH1001/sub-districts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"districts",
+										":pcode",
+										"sub-districts"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH1001"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100101\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"พระบรมมหาราชวัง\",\n      \"name_en\": \"Phraborom Maharatchawang\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 1.5365547745229131,\n      \"centroid_lng\": 100.49197306049518,\n      \"centroid_lat\": 13.751552138000108,\n      \"bbox_min_lng\": 100.48764453700016,\n      \"bbox_min_lat\": 13.740802218000056,\n      \"bbox_max_lng\": 100.49645422000015,\n      \"bbox_max_lat\": 13.761928724000143,\n      \"distance_to_bangkok_km\": 12.382239726109999,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100102\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.7261342445858364,\n      \"centroid_lng\": 100.49894806595492,\n      \"centroid_lat\": 13.743427853500094,\n      \"bbox_min_lng\": 100.49344123700018,\n      \"bbox_min_lat\": 13.738632557000017,\n      \"bbox_max_lng\": 100.50411586299998,\n      \"bbox_max_lat\": 13.74848521399997,\n      \"distance_to_bangkok_km\": 11.453012750820001,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.21175843037540465,\n      \"centroid_lng\": 100.49902969166848,\n      \"centroid_lat\": 13.750375024500073,\n      \"bbox_min_lng\": 100.49624833200016,\n      \"bbox_min_lat\": 13.748003401000176,\n      \"bbox_max_lng\": 100.50189634700001,\n      \"bbox_max_lat\": 13.751805813000033,\n      \"distance_to_bangkok_km\": 11.61043078582,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    \"...(9 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get District Neighbors",
+					"description": "ดูอำเภอข้างเคียงของอำเภอที่เลือก เหมาะกับการทำแผนที่ adjacency หรือหาเขตติดกัน",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/neighbors",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "districts", ":pcode", "neighbors"],
-							"variable": [{ "key": "pcode", "value": "TH1001" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"districts",
+								":pcode",
+								"neighbors"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH1001"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH1001 neighbors",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/districts/TH1001/neighbors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"districts",
+										":pcode",
+										"neighbors"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH1001"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH1002\",\n      \"name_th\": \"ดุสิต\",\n      \"name_en\": \"Dusit\",\n      \"level\": \"district\"\n    },\n    {\n      \"pcode\": \"TH1008\",\n      \"name_th\": \"ป้อมปราบศัตรูพ่าย\",\n      \"name_en\": \"Pom Prap Sattru Phai\",\n      \"level\": \"district\"\n    },\n    {\n      \"pcode\": \"TH1013\",\n      \"name_th\": \"สัมพันธวงศ์\",\n      \"name_en\": \"Samphanthawong\",\n      \"level\": \"district\"\n    },\n    \"...(5 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get District GeoJSON",
+					"description": "ดึงขอบเขตอำเภอเป็น raw GeoJSON. เปิด simplified=false เมื่อจำเป็นต้องใช้ geometry ละเอียดขึ้น",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/districts/:pcode/geojson",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "districts", ":pcode", "geojson"],
-							"variable": [{ "key": "pcode", "value": "TH1001" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"districts",
+								":pcode",
+								"geojson"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH1001"
+								}
+							],
+							"query": [
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "simplified geometry",
+									"disabled": true
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH1001 GeoJSON",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/districts/TH1001/geojson",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"districts",
+										":pcode",
+										"geojson"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH1001"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": \"[...coordinates omitted for brevity...]\"\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "3. Sub-districts (ตำบล)",
+			"name": "3. Core Hierarchy: Sub-districts (ตำบล)",
+			"description": "ใช้ค้นหาและกรองตำบลแบบ faceted, lookup ตาม pcode, neighbors, GeoJSON และหมู่บ้านภายใต้ตำบล",
 			"item": [
 				{
 					"name": "Filter Sub-districts (Faceted)",
+					"description": "ใช้ดูรายการตำบลแบบ faceted filter. ลอง: province=TH10, district=TH1001, is_island=true หรือ offset=3",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/sub-districts",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "sub-districts"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"sub-districts"
+							],
 							"query": [
-								{ "key": "province", "value": "TH10", "description": "กรองตามจังหวัด", "disabled": true },
-								{ "key": "district", "value": "TH1001", "description": "กรองตามอำเภอ", "disabled": true },
-								{ "key": "is_coastal", "value": "true", "description": "เฉพาะชายทะเล", "disabled": true },
-								{ "key": "is_island", "value": "true", "description": "เฉพาะเกาะ", "disabled": true },
-								{ "key": "max_distance_bkk_km", "value": "50", "description": "รัศมีจากกรุงเทพฯ (km)", "disabled": true },
-								{ "key": "limit", "value": "50", "disabled": true },
-								{ "key": "offset", "value": "0", "disabled": true }
+								{
+									"key": "province",
+									"value": "TH10",
+									"description": "กรองตามรหัสจังหวัด",
+									"disabled": true
+								},
+								{
+									"key": "district",
+									"value": "TH1001",
+									"description": "กรองตามรหัสอำเภอ",
+									"disabled": true
+								},
+								{
+									"key": "is_coastal",
+									"value": "true",
+									"description": "เฉพาะตำบลชายทะเล",
+									"disabled": true
+								},
+								{
+									"key": "is_island",
+									"value": "true",
+									"description": "เฉพาะตำบลเกาะ",
+									"disabled": true
+								},
+								{
+									"key": "max_distance_bkk_km",
+									"value": "50",
+									"description": "รัศมีจากกรุงเทพฯ (กม.) — ใช้คู่กับ province/district",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "จำนวนสูงสุดต่อหน้า (default 50)",
+									"disabled": true
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "offset สำหรับ pagination",
+									"disabled": true
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Filter: province=TH10&limit=5",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts?province=TH10&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts"
+									],
+									"query": [
+										{
+											"key": "province",
+											"value": "TH10"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100101\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"พระบรมมหาราชวัง\",\n      \"name_en\": \"Phraborom Maharatchawang\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 1.5365547745229131,\n      \"centroid_lng\": 100.49197306049518,\n      \"centroid_lat\": 13.751552138000108,\n      \"bbox_min_lng\": 100.48764453700016,\n      \"bbox_min_lat\": 13.740802218000056,\n      \"bbox_max_lng\": 100.49645422000015,\n      \"bbox_max_lat\": 13.761928724000143,\n      \"distance_to_bangkok_km\": 12.382239726109999,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100102\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.7261342445858364,\n      \"centroid_lng\": 100.49894806595492,\n      \"centroid_lat\": 13.743427853500094,\n      \"bbox_min_lng\": 100.49344123700018,\n      \"bbox_min_lat\": 13.738632557000017,\n      \"bbox_max_lng\": 100.50411586299998,\n      \"bbox_max_lat\": 13.74848521399997,\n      \"distance_to_bangkok_km\": 11.453012750820001,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.21175843037540465,\n      \"centroid_lng\": 100.49902969166848,\n      \"centroid_lat\": 13.750375024500073,\n      \"bbox_min_lng\": 100.49624833200016,\n      \"bbox_min_lat\": 13.748003401000176,\n      \"bbox_max_lng\": 100.50189634700001,\n      \"bbox_max_lat\": 13.751805813000033,\n      \"distance_to_bangkok_km\": 11.61043078582,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: is_coastal=true&limit=5",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts?is_coastal=true&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts"
+									],
+									"query": [
+										{
+											"key": "is_coastal",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH102105\",\n      \"district_pcode\": \"TH1021\",\n      \"name_th\": \"ท่าข้าม\",\n      \"name_en\": \"Tha Kham\",\n      \"zip_code\": \"10150\",\n      \"area_sqkm\": 74.28512071723435,\n      \"centroid_lng\": 100.4300110908971,\n      \"centroid_lat\": 13.584349934000159,\n      \"bbox_min_lng\": 100.38889180600012,\n      \"bbox_min_lat\": 13.493389571000023,\n      \"bbox_max_lng\": 100.48172648500008,\n      \"bbox_max_lat\": 13.675430839000114,\n      \"distance_to_bangkok_km\": 24.297680226209998,\n      \"is_coastal\": true,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH110104\",\n      \"district_pcode\": \"TH1101\",\n      \"name_th\": \"ท้ายบ้าน\",\n      \"name_en\": \"Thai Ban\",\n      \"zip_code\": \"10280\",\n      \"area_sqkm\": 13.949025046949714,\n      \"centroid_lng\": 100.59518895639523,\n      \"centroid_lat\": 13.558042331000024,\n      \"bbox_min_lng\": 100.57605703800016,\n      \"bbox_min_lat\": 13.535640429000011,\n      \"bbox_max_lng\": 100.62150659600007,\n      \"bbox_max_lat\": 13.580127978000064,\n      \"distance_to_bangkok_km\": 18.4207321301,\n      \"is_coastal\": true,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH110108\",\n      \"district_pcode\": \"TH1101\",\n      \"name_th\": \"บางปูใหม่\",\n      \"name_en\": \"Bang Pu Mai\",\n      \"zip_code\": \"10280\",\n      \"area_sqkm\": 30.261896854568864,\n      \"centroid_lng\": 100.66160939079793,\n      \"centroid_lat\": 13.528575008000018,\n      \"bbox_min_lng\": 100.61502672700016,\n      \"bbox_min_lat\": 13.501072277000162,\n      \"bbox_max_lng\": 100.71929786500016,\n      \"bbox_max_lat\": 13.556081444000142,\n      \"distance_to_bangkok_km\": 22.56971034892,\n      \"is_coastal\": true,\n      \"is_island\": false\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: is_island=true&limit=5",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts?is_island=true&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts"
+									],
+									"query": [
+										{
+											"key": "is_island",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH200510\",\n      \"district_pcode\": \"TH2005\",\n      \"name_th\": \"เกาะลอย\",\n      \"name_en\": \"Ko Loi\",\n      \"zip_code\": \"20160\",\n      \"area_sqkm\": 12.232120924607873,\n      \"centroid_lng\": 101.0791345957101,\n      \"centroid_lat\": 13.528051125000019,\n      \"bbox_min_lng\": 101.0672461600002,\n      \"bbox_min_lat\": 13.498164978000034,\n      \"bbox_max_lng\": 101.09992645200003,\n      \"bbox_max_lat\": 13.558206137000184,\n      \"distance_to_bangkok_km\": 55.90873073404,\n      \"is_coastal\": false,\n      \"is_island\": true\n    },\n    {\n      \"pcode\": \"TH201101\",\n      \"district_pcode\": \"TH2011\",\n      \"name_th\": \"เกาะจันทร์\",\n      \"name_en\": \"Ko Chan\",\n      \"zip_code\": \"20240\",\n      \"area_sqkm\": 201.94651077264982,\n      \"centroid_lng\": 101.4263037399842,\n      \"centroid_lat\": 13.40741838750003,\n      \"bbox_min_lng\": 101.3111746410001,\n      \"bbox_min_lat\": 13.33975741900008,\n      \"bbox_max_lng\": 101.54895766000004,\n      \"bbox_max_lat\": 13.474952123000037,\n      \"distance_to_bangkok_km\": 95.75718488718,\n      \"is_coastal\": false,\n      \"is_island\": true\n    },\n    {\n      \"pcode\": \"TH220104\",\n      \"district_pcode\": \"TH2201\",\n      \"name_th\": \"เกาะขวาง\",\n      \"name_en\": \"Ko Khwang\",\n      \"zip_code\": \"22000\",\n      \"area_sqkm\": 25.514115171383516,\n      \"centroid_lng\": 102.10256811733004,\n      \"centroid_lat\": 12.564515634500026,\n      \"bbox_min_lng\": 102.07377418900006,\n      \"bbox_min_lat\": 12.536141811000164,\n      \"bbox_max_lng\": 102.13931810000003,\n      \"bbox_max_lat\": 12.592769831000055,\n      \"distance_to_bangkok_km\": 207.11582165906,\n      \"is_coastal\": false,\n      \"is_island\": true\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: district=TH1001&limit=3",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts?district=TH1001&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts"
+									],
+									"query": [
+										{
+											"key": "district",
+											"value": "TH1001"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100101\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"พระบรมมหาราชวัง\",\n      \"name_en\": \"Phraborom Maharatchawang\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 1.5365547745229131,\n      \"centroid_lng\": 100.49197306049518,\n      \"centroid_lat\": 13.751552138000108,\n      \"bbox_min_lng\": 100.48764453700016,\n      \"bbox_min_lat\": 13.740802218000056,\n      \"bbox_max_lng\": 100.49645422000015,\n      \"bbox_max_lat\": 13.761928724000143,\n      \"distance_to_bangkok_km\": 12.382239726109999,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100102\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.7261342445858364,\n      \"centroid_lng\": 100.49894806595492,\n      \"centroid_lat\": 13.743427853500094,\n      \"bbox_min_lng\": 100.49344123700018,\n      \"bbox_min_lat\": 13.738632557000017,\n      \"bbox_max_lng\": 100.50411586299998,\n      \"bbox_max_lat\": 13.74848521399997,\n      \"distance_to_bangkok_km\": 11.453012750820001,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.21175843037540465,\n      \"centroid_lng\": 100.49902969166848,\n      \"centroid_lat\": 13.750375024500073,\n      \"bbox_min_lng\": 100.49624833200016,\n      \"bbox_min_lat\": 13.748003401000176,\n      \"bbox_max_lng\": 100.50189634700001,\n      \"bbox_max_lat\": 13.751805813000033,\n      \"distance_to_bangkok_km\": 11.61043078582,\n      \"is_coastal\": false,\n      \"is_island\": false\n    }\n  ]\n}"
+						},
+						{
+							"name": "200 — Pagination: province=TH10&limit=3&offset=3",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts?province=TH10&limit=3&offset=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts"
+									],
+									"query": [
+										{
+											"key": "province",
+											"value": "TH10"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										},
+										{
+											"key": "offset",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100104\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"สำราญราษฎร์\",\n      \"name_en\": \"Samran Rat\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.22978580781129887,\n      \"centroid_lng\": 100.50323806114588,\n      \"centroid_lat\": 13.75035254250011,\n      \"bbox_min_lng\": 100.50130793400012,\n      \"bbox_min_lat\": 13.747706773000175,\n      \"bbox_max_lng\": 100.50554288800004,\n      \"bbox_max_lat\": 13.754589962000068,\n      \"distance_to_bangkok_km\": 11.16940481812,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100105\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"ศาลเจ้าพ่อเสือ\",\n      \"name_en\": \"San Chaopho Suea\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.15043950230783829,\n      \"centroid_lng\": 100.49715688680796,\n      \"centroid_lat\": 13.753887301500072,\n      \"bbox_min_lng\": 100.49521194000005,\n      \"bbox_min_lat\": 13.751269715000092,\n      \"bbox_max_lng\": 100.49874521600015,\n      \"bbox_max_lat\": 13.75658818200003,\n      \"distance_to_bangkok_km\": 11.90736849438,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100106\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"เสาชิงช้า\",\n      \"name_en\": \"Sao Chingcha\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.15466245927461936,\n      \"centroid_lng\": 100.50035908809862,\n      \"centroid_lat\": 13.753557083500112,\n      \"bbox_min_lng\": 100.49821149600007,\n      \"bbox_min_lat\": 13.751473834000024,\n      \"bbox_max_lng\": 100.50239380600004,\n      \"bbox_max_lat\": 13.755602168000166,\n      \"distance_to_bangkok_km\": 11.56446106818,\n      \"is_coastal\": false,\n      \"is_island\": false\n    }\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Sub-district by pcode",
+					"description": "ดูรายละเอียดตำบลเดียวตาม pcode พร้อม zip_code และพิกัดศูนย์กลาง",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "sub-districts", ":pcode"],
-							"variable": [{ "key": "pcode", "value": "TH100101", "description": "รหัสตำบล" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"sub-districts",
+								":pcode"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH100101",
+									"description": "รหัสตำบล 8 หลัก เช่น TH100101=พระบรมมหาราชวัง"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH100101",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts/TH100101",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts",
+										":pcode"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH100101"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"pcode\": \"TH100101\",\n    \"district_pcode\": \"TH1001\",\n    \"name_th\": \"พระบรมมหาราชวัง\",\n    \"name_en\": \"Phraborom Maharatchawang\",\n    \"zip_code\": \"10200\",\n    \"area_sqkm\": 1.5365547745229131,\n    \"centroid_lng\": 100.49197306049518,\n    \"centroid_lat\": 13.751552138000108,\n    \"bbox_min_lng\": 100.48764453700016,\n    \"bbox_min_lat\": 13.740802218000056,\n    \"bbox_max_lng\": 100.49645422000015,\n    \"bbox_max_lat\": 13.761928724000143,\n    \"distance_to_bangkok_km\": 12.382239726109999,\n    \"is_coastal\": false,\n    \"is_island\": false\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Sub-district Neighbors",
+					"description": "ดูตำบลที่มีเขตติดกับตำบลนี้ เหมาะกับ use case ด้าน spatial adjacency หรือหาเขตข้างเคียง",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/neighbors",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "neighbors"],
-							"variable": [{ "key": "pcode", "value": "TH100101" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"sub-districts",
+								":pcode",
+								"neighbors"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH100101"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH100101 neighbors",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts/TH100101/neighbors",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts",
+										":pcode",
+										"neighbors"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH100101"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100102\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH100105\",\n      \"name_th\": \"ศาลเจ้าพ่อเสือ\",\n      \"name_en\": \"San Chaopho Suea\",\n      \"level\": \"sub_district\"\n    },\n    \"...(8 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Sub-district GeoJSON",
+					"description": "ดึงขอบเขตตำบลเป็น raw GeoJSON. ลอง simplified=false เมื่อต้องการ full-resolution boundary",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/geojson?simplified=true",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "geojson"],
-							"variable": [{ "key": "pcode", "value": "TH100101" }],
-							"query": [{ "key": "simplified", "value": "true" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"sub-districts",
+								":pcode",
+								"geojson"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH100101"
+								}
+							],
+							"query": [
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "simplified=false เพื่อ full-resolution boundary"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — TH100101 GeoJSON",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts/TH100101/geojson?simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts",
+										":pcode",
+										"geojson"
+									],
+									"query": [
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH100101"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": \"[...coordinates omitted for brevity...]\"\n}"
+						}
+					]
 				},
 				{
 					"name": "List Villages in Sub-district",
+					"description": "ดูรายชื่อหมู่บ้านทั้งหมดภายใต้ตำบลเดียว ใช้ต่อยอดทำ directory หรือ data drill-down",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/sub-districts/:pcode/villages",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "sub-districts", ":pcode", "villages"],
-							"variable": [{ "key": "pcode", "value": "TH100101" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"sub-districts",
+								":pcode",
+								"villages"
+							],
+							"variable": [
+								{
+									"key": "pcode",
+									"value": "TH100101",
+									"description": "รหัสตำบล — หมู่บ้านในตำบลนั้น"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Villages in TH100101",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/sub-districts/TH100101/villages",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"sub-districts",
+										":pcode",
+										"villages"
+									],
+									"variable": [
+										{
+											"key": "pcode",
+											"value": "TH100101"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"main_id\": 10010101,\n      \"vill_id\": 10010101,\n      \"vill_seq\": 0,\n      \"name_th\": \"ชุมชนท่าเตียน\",\n      \"tam_name\": \"\",\n      \"amp_name\": \"\",\n      \"prv_name\": \"\",\n      \"sub_district_pcode\": \"TH100101\",\n      \"lng\": 0,\n      \"lat\": 0,\n      \"source\": \"villages\"\n    },\n    {\n      \"main_id\": 10010102,\n      \"vill_id\": 10010102,\n      \"vill_seq\": 0,\n      \"name_th\": \"ชุมชนท่าวัง\",\n      \"tam_name\": \"\",\n      \"amp_name\": \"\",\n      \"prv_name\": \"\",\n      \"sub_district_pcode\": \"TH100101\",\n      \"lng\": 0,\n      \"lat\": 0,\n      \"source\": \"villages\"\n    }\n  ]\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "4. Other Lookups (zip / region)",
+			"name": "4. Reference Lookups (ZIP / Region)",
+			"description": "lookup แบบสั้นและเร็วจากรหัสไปรษณีย์หรือ region name เหมาะกับงาน filter และ form helper",
 			"item": [
 				{
 					"name": "Get Sub-districts by ZIP Code",
+					"description": "ดูตำบลทั้งหมดที่ใช้รหัสไปรษณีย์เดียวกัน. ลอง 10200, 50000 หรือ 83000",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/zip/:zip",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "zip", ":zip"],
-							"variable": [{ "key": "zip", "value": "10200", "description": "รหัสไปรษณีย์ 5 หลัก" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"zip",
+								":zip"
+							],
+							"variable": [
+								{
+									"key": "zip",
+									"value": "10200",
+									"description": "รหัสไปรษณีย์ 5 หลัก เช่น 10200=บางรัก | 50000=เชียงใหม่"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — ZIP 10200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/zip/10200",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"zip",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "10200"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100101\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"พระบรมมหาราชวัง\",\n      \"name_en\": \"Phraborom Maharatchawang\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 1.5365547745229131,\n      \"centroid_lng\": 100.49197306049518,\n      \"centroid_lat\": 13.751552138000108,\n      \"bbox_min_lng\": 100.48764453700016,\n      \"bbox_min_lat\": 13.740802218000056,\n      \"bbox_max_lng\": 100.49645422000015,\n      \"bbox_max_lat\": 13.761928724000143,\n      \"distance_to_bangkok_km\": 12.382239726109999,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100102\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.7261342445858364,\n      \"centroid_lng\": 100.49894806595492,\n      \"centroid_lat\": 13.743427853500094,\n      \"bbox_min_lng\": 100.49344123700018,\n      \"bbox_min_lat\": 13.738632557000017,\n      \"bbox_max_lng\": 100.50411586299998,\n      \"bbox_max_lat\": 13.74848521399997,\n      \"distance_to_bangkok_km\": 11.453012750820001,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"district_pcode\": \"TH1001\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"zip_code\": \"10200\",\n      \"area_sqkm\": 0.21175843037540465,\n      \"centroid_lng\": 100.49902969166848,\n      \"centroid_lat\": 13.750375024500073,\n      \"bbox_min_lng\": 100.49624833200016,\n      \"bbox_min_lat\": 13.748003401000176,\n      \"bbox_max_lng\": 100.50189634700001,\n      \"bbox_max_lat\": 13.751805813000033,\n      \"distance_to_bangkok_km\": 11.61043078582,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    \"...(9 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — ZIP 50000 เชียงใหม่",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/zip/50000",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"zip",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "50000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH500106\",\n      \"district_pcode\": \"TH5001\",\n      \"name_th\": \"วัดเกต\",\n      \"name_en\": \"Wat Ket\",\n      \"zip_code\": \"50000\",\n      \"area_sqkm\": 6.811218991450216,\n      \"centroid_lng\": 99.01231704867729,\n      \"centroid_lat\": 18.78436645900007,\n      \"bbox_min_lng\": 98.99967040900003,\n      \"bbox_min_lat\": 18.764133394,\n      \"bbox_max_lng\": 99.02052597600016,\n      \"bbox_max_lat\": 18.804598071999976,\n      \"distance_to_bangkok_km\": 585.17933884409,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH500111\",\n      \"district_pcode\": \"TH5001\",\n      \"name_th\": \"หนองหอย\",\n      \"name_en\": \"Nong Hoi\",\n      \"zip_code\": \"50000\",\n      \"area_sqkm\": 5.836233551095948,\n      \"centroid_lng\": 99.0110963150911,\n      \"centroid_lat\": 18.759611283000027,\n      \"bbox_min_lng\": 98.99498261800017,\n      \"bbox_min_lat\": 18.744766964000064,\n      \"bbox_max_lng\": 99.02909129100016,\n      \"bbox_max_lat\": 18.773914433000073,\n      \"distance_to_bangkok_km\": 582.5992714664201,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    {\n      \"pcode\": \"TH500112\",\n      \"district_pcode\": \"TH5001\",\n      \"name_th\": \"ท่าศาลา\",\n      \"name_en\": \"Tha Sala\",\n      \"zip_code\": \"50000\",\n      \"area_sqkm\": 6.828940890695793,\n      \"centroid_lng\": 99.0326608613428,\n      \"centroid_lat\": 18.767597496500144,\n      \"bbox_min_lng\": 99.01866276100009,\n      \"bbox_min_lat\": 18.750309850000065,\n      \"bbox_max_lng\": 99.048570729,\n      \"bbox_max_lat\": 18.784868284000027,\n      \"distance_to_bangkok_km\": 582.77602251238,\n      \"is_coastal\": false,\n      \"is_island\": false\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: invalid ZIP format",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/zip/abcde",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"zip",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "abcde"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid zip code (must be 5 digits)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid zip code (must be 5 digits)\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "List Provinces by Region",
+					"description": "ดูจังหวัดตามภูมิภาคเดียว เช่น north, northeast, central, east, west, south",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/regions/:region",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "regions", ":region"],
-							"variable": [{ "key": "region", "value": "north", "description": "north | northeast | central | east | west | south" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"regions",
+								":region"
+							],
+							"variable": [
+								{
+									"key": "region",
+									"value": "north",
+									"description": "north | northeast | central | east | west | south"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — region=north",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/regions/north",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"regions",
+										":region"
+									],
+									"variable": [
+										{
+											"key": "region",
+											"value": "north"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH50\",\n      \"name_th\": \"เชียงใหม่\",\n      \"name_en\": \"Chiang Mai\",\n      \"region\": \"north\",\n      \"area_sqkm\": 22176.03710791237,\n      \"centroid_lng\": 98.61875253339463,\n      \"centroid_lat\": 18.695048585500103,\n      \"bbox_min_lng\": 98.008039053,\n      \"bbox_min_lat\": 17.242274746000078,\n      \"bbox_max_lng\": 99.57291340000012,\n      \"bbox_max_lat\": 20.147855699000047,\n      \"distance_to_bangkok_km\": 589.53111626852,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-50\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH51\",\n      \"name_th\": \"ลำพูน\",\n      \"name_en\": \"Lamphun\",\n      \"region\": \"north\",\n      \"area_sqkm\": 4482.899998109015,\n      \"centroid_lng\": 98.93979955561129,\n      \"centroid_lat\": 18.06691694550011,\n      \"bbox_min_lng\": 98.67082153900009,\n      \"bbox_min_lat\": 17.425651825000102,\n      \"bbox_max_lng\": 99.32154337100002,\n      \"bbox_max_lat\": 18.708365699000126,\n      \"distance_to_bangkok_km\": 512.46775858676,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-51\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"secondary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH52\",\n      \"name_th\": \"ลำปาง\",\n      \"name_en\": \"Lampang\",\n      \"region\": \"north\",\n      \"area_sqkm\": 12496.449174280891,\n      \"centroid_lng\": 99.52458636407992,\n      \"centroid_lat\": 18.31174517350007,\n      \"bbox_min_lng\": 98.8800492100001,\n      \"bbox_min_lat\": 17.20547338500006,\n      \"bbox_max_lng\": 100.12599415200009,\n      \"bbox_max_lat\": 19.417657702000042,\n      \"distance_to_bangkok_km\": 520.58427261629,\n      \"is_coastal\": false,\n      \"iso_3166_2\": \"TH-52\",\n      \"region_4\": \"north\",\n      \"region_4_th\": \"ภาคเหนือ\",\n      \"region_9\": \"north_upper\",\n      \"region_9_th\": \"ภาคเหนือตอนบน\",\n      \"tourism_tier\": \"secondary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    \"...(6 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — region=south",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/regions/south",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"regions",
+										":region"
+									],
+									"variable": [
+										{
+											"key": "region",
+											"value": "south"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH80\",\n      \"name_th\": \"นครศรีธรรมราช\",\n      \"name_en\": \"Nakhon Si Thammarat\",\n      \"region\": \"south\",\n      \"area_sqkm\": 9901.712742107997,\n      \"centroid_lng\": 99.71828410055397,\n      \"centroid_lat\": 8.580444889500143,\n      \"bbox_min_lng\": 99.23441060400006,\n      \"bbox_min_lat\": 7.838037589000066,\n      \"bbox_max_lng\": 100.33657390400009,\n      \"bbox_max_lat\": 9.326116983000077,\n      \"distance_to_bangkok_km\": 577.1450449251,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-80\",\n      \"region_4\": \"south\",\n      \"region_4_th\": \"ภาคใต้\",\n      \"region_9\": \"south_upper\",\n      \"region_9_th\": \"ภาคใต้ตอนบน\",\n      \"tourism_tier\": \"secondary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH81\",\n      \"name_th\": \"กระบี่\",\n      \"name_en\": \"Krabi\",\n      \"region\": \"south\",\n      \"area_sqkm\": 4988.355351024835,\n      \"centroid_lng\": 99.02246634953225,\n      \"centroid_lat\": 8.169592464500113,\n      \"bbox_min_lng\": 98.61159756900014,\n      \"bbox_min_lat\": 7.467276578000053,\n      \"bbox_max_lng\": 99.41499302000005,\n      \"bbox_max_lat\": 8.68184028900015,\n      \"distance_to_bangkok_km\": 638.2484924183,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-81\",\n      \"region_4\": \"south\",\n      \"region_4_th\": \"ภาคใต้\",\n      \"region_9\": \"south_upper\",\n      \"region_9_th\": \"ภาคใต้ตอนบน\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    {\n      \"pcode\": \"TH82\",\n      \"name_th\": \"พังงา\",\n      \"name_en\": \"Phangnga\",\n      \"region\": \"south\",\n      \"area_sqkm\": 4095.731329104467,\n      \"centroid_lng\": 98.41792400371192,\n      \"centroid_lat\": 8.737666866500064,\n      \"bbox_min_lng\": 97.63083005100003,\n      \"bbox_min_lat\": 7.744310378000023,\n      \"bbox_max_lng\": 98.70775378200011,\n      \"bbox_max_lat\": 9.478956221000146,\n      \"distance_to_bangkok_km\": 600.9788187414,\n      \"is_coastal\": true,\n      \"iso_3166_2\": \"TH-82\",\n      \"region_4\": \"south\",\n      \"region_4_th\": \"ภาคใต้\",\n      \"region_9\": \"south_upper\",\n      \"region_9_th\": \"ภาคใต้ตอนบน\",\n      \"tourism_tier\": \"primary\",\n      \"is_bmr\": false,\n      \"admin_type\": \"province\",\n      \"governance\": \"pao\"\n    },\n    \"...(11 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Empty result: region=narnia",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/regions/narnia",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"regions",
+										":region"
+									],
+									"variable": [
+										{
+											"key": "region",
+											"value": "narnia"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": []\n}"
+						}
+					]
 				}
 			]
 		},
 		{
 			"name": "5. Reverse Geocode (แปลงพิกัด)",
+			"description": "ไล่อ่านจาก reverse จุดเดียว -> boundary highlight -> batch เพื่อเริ่มจากงาน lookup ก่อนแล้วค่อยขยายไปงานแผนที่และงานหลายจุด",
 			"item": [
 				{
 					"name": "Reverse Geocode (Single Point)",
+					"description": "ใช้ดู hierarchy ของพิกัดจุดเดียว. ลอง: 13.7563,100.5018, 18.7883,98.9853 หรือพิกัดนอก Thailand bbox เพื่อดู error",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/reverse?lat=13.7563&lng=100.5018",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "reverse"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"reverse"
+							],
 							"query": [
-								{ "key": "lat", "value": "13.7563", "description": "ละติจูด" },
-								{ "key": "lng", "value": "100.5018", "description": "ลองจิจูด" }
+								{
+									"key": "lat",
+									"value": "13.7563",
+									"description": "ละติจูด (WGS84)"
+								},
+								{
+									"key": "lng",
+									"value": "100.5018",
+									"description": "ลองจิจูด (WGS84)"
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Point: Bangkok Old Town",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/reverse?lat=13.7563&lng=100.5018",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"reverse"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"lng\": 100.5018,\n    \"lat\": 13.7563,\n    \"match\": {\n      \"pcode\": \"TH100107\",\n      \"name_th\": \"บวรนิเวศ\",\n      \"name_en\": \"Bowon Niwet\",\n      \"level\": \"sub_district\"\n    },\n    \"hierarchy\": {\n      \"province\": {\n        \"pcode\": \"TH10\",\n        \"name_th\": \"กรุงเทพมหานคร\",\n        \"name_en\": \"Bangkok\",\n        \"region\": \"central\"\n      },\n      \"district\": {\n        \"pcode\": \"TH1001\",\n        \"name_th\": \"พระนคร\",\n        \"name_en\": \"Phra Nakhon\"\n      },\n      \"sub_district\": {\n        \"pcode\": \"TH100107\",\n        \"name_th\": \"บวรนิเวศ\",\n        \"name_en\": \"Bowon Niwet\",\n        \"zip_code\": \"10200\"\n      }\n    },\n    \"address_line_th\": \"แขวงบวรนิเวศ เขตพระนคร กรุงเทพมหานคร 10200\",\n    \"address_line_en\": \"Bowon Niwet, Phra Nakhon, Bangkok 10200\"\n  }\n}"
+						},
+						{
+							"name": "200 — Point: Chiang Mai Old City",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/reverse?lat=18.7883&lng=98.9853",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"reverse"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "18.7883"
+										},
+										{
+											"key": "lng",
+											"value": "98.9853"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"lng\": 98.9853,\n    \"lat\": 18.7883,\n    \"match\": {\n      \"pcode\": \"TH500102\",\n      \"name_th\": \"พระสิงห์\",\n      \"name_en\": \"Phra Sing\",\n      \"level\": \"sub_district\"\n    },\n    \"hierarchy\": {\n      \"province\": {\n        \"pcode\": \"TH50\",\n        \"name_th\": \"เชียงใหม่\",\n        \"name_en\": \"Chiang Mai\",\n        \"region\": \"north\"\n      },\n      \"district\": {\n        \"pcode\": \"TH5001\",\n        \"name_th\": \"เมืองเชียงใหม่\",\n        \"name_en\": \"Mueang Chiang Mai\"\n      },\n      \"sub_district\": {\n        \"pcode\": \"TH500102\",\n        \"name_th\": \"พระสิงห์\",\n        \"name_en\": \"Phra Sing\",\n        \"zip_code\": \"50200\"\n      }\n    },\n    \"address_line_th\": \"ตำบลพระสิงห์ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200\",\n    \"address_line_en\": \"Phra Sing, Mueang Chiang Mai, Chiang Mai 50200\"\n  }\n}"
+						},
+						{
+							"name": "400 — Invalid bbox: outside Thailand",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/reverse?lat=1.3521&lng=103.8198",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"reverse"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "1.3521"
+										},
+										{
+											"key": "lng",
+											"value": "103.8198"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid lat/lng (must be inside Thailand bbox: lat 5–21, lng 97–106)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid lat/lng (must be inside Thailand bbox: lat 5–21, lng 97–106)\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Area (Reverse + Boundary in 1 Round-trip)",
+					"description": "ใช้ดู reverse geocode พร้อม boundary polygon ในครั้งเดียว. ลอง: level=sub_district, district หรือ province",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=sub_district&simplified=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"areas"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "13.7563",
+									"description": "ละติจูด (WGS84)"
+								},
+								{
+									"key": "lng",
+									"value": "100.5018",
+									"description": "ลองจิจูด (WGS84)"
+								},
+								{
+									"key": "level",
+									"value": "sub_district",
+									"description": "province | district | sub_district"
+								},
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "simplified geometry boundary"
+								}
+							]
+						},
+						"description": "สำหรับ map tap: reverse geocode + boundary polygon ใน 1 round-trip"
+					},
+					"response": [
+						{
+							"name": "200 — Boundary: level=sub_district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=sub_district&simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"areas"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "level",
+											"value": "sub_district"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"lng\": 100.5018,\n    \"lat\": 13.7563,\n    \"match\": {\n      \"pcode\": \"TH100107\",\n      \"name_th\": \"บวรนิเวศ\",\n      \"name_en\": \"Bowon Niwet\",\n      \"level\": \"sub_district\"\n    },\n    \"hierarchy\": {\n      \"province\": {\n        \"pcode\": \"TH10\",\n        \"name_th\": \"กรุงเทพมหานคร\",\n        \"name_en\": \"Bangkok\",\n        \"region\": \"central\"\n      },\n      \"district\": {\n        \"pcode\": \"TH1001\",\n        \"name_th\": \"พระนคร\",\n        \"name_en\": \"Phra Nakhon\"\n      },\n      \"sub_district\": {\n        \"pcode\": \"TH100107\",\n        \"name_th\": \"บวรนิเวศ\",\n        \"name_en\": \"Bowon Niwet\",\n        \"zip_code\": \"10200\"\n      }\n    },\n    \"address_line_th\": \"แขวงบวรนิเวศ เขตพระนคร กรุงเทพมหานคร 10200\",\n    \"address_line_en\": \"Bowon Niwet, Phra Nakhon, Bangkok 10200\",\n    \"boundary\": {\n      \"type\": \"Polygon\",\n      \"coordinates\": \"[...coordinates omitted for brevity...]\"\n    }\n  }\n}"
+						},
+						{
+							"name": "200 — Boundary: level=district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=district&simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"areas"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "level",
+											"value": "district"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"lng\": 100.5018,\n    \"lat\": 13.7563,\n    \"match\": {\n      \"pcode\": \"TH100107\",\n      \"name_th\": \"บวรนิเวศ\",\n      \"name_en\": \"Bowon Niwet\",\n      \"level\": \"sub_district\"\n    },\n    \"hierarchy\": {\n      \"province\": {\n        \"pcode\": \"TH10\",\n        \"name_th\": \"กรุงเทพมหานคร\",\n        \"name_en\": \"Bangkok\",\n        \"region\": \"central\"\n      },\n      \"district\": {\n        \"pcode\": \"TH1001\",\n        \"name_th\": \"พระนคร\",\n        \"name_en\": \"Phra Nakhon\"\n      },\n      \"sub_district\": {\n        \"pcode\": \"TH100107\",\n        \"name_th\": \"บวรนิเวศ\",\n        \"name_en\": \"Bowon Niwet\",\n        \"zip_code\": \"10200\"\n      }\n    },\n    \"address_line_th\": \"แขวงบวรนิเวศ เขตพระนคร กรุงเทพมหานคร 10200\",\n    \"address_line_en\": \"Bowon Niwet, Phra Nakhon, Bangkok 10200\",\n    \"boundary\": {\n      \"type\": \"Polygon\",\n      \"coordinates\": \"[...coordinates omitted for brevity...]\"\n    }\n  }\n}"
+						},
+						{
+							"name": "200 — Boundary: level=province",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=province&simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"areas"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "level",
+											"value": "province"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"lng\": 100.5018,\n    \"lat\": 13.7563,\n    \"match\": {\n      \"pcode\": \"TH100107\",\n      \"name_th\": \"บวรนิเวศ\",\n      \"name_en\": \"Bowon Niwet\",\n      \"level\": \"sub_district\"\n    },\n    \"hierarchy\": {\n      \"province\": {\n        \"pcode\": \"TH10\",\n        \"name_th\": \"กรุงเทพมหานคร\",\n        \"name_en\": \"Bangkok\",\n        \"region\": \"central\"\n      },\n      \"district\": {\n        \"pcode\": \"TH1001\",\n        \"name_th\": \"พระนคร\",\n        \"name_en\": \"Phra Nakhon\"\n      },\n      \"sub_district\": {\n        \"pcode\": \"TH100107\",\n        \"name_th\": \"บวรนิเวศ\",\n        \"name_en\": \"Bowon Niwet\",\n        \"zip_code\": \"10200\"\n      }\n    },\n    \"address_line_th\": \"แขวงบวรนิเวศ เขตพระนคร กรุงเทพมหานคร 10200\",\n    \"address_line_en\": \"Bowon Niwet, Phra Nakhon, Bangkok 10200\",\n    \"boundary\": {\n      \"type\": \"Polygon\",\n      \"coordinates\": \"[...coordinates omitted for brevity...]\"\n    }\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Reverse Geocode Batch (POST ≤ 1000 points)",
+					"description": "ใช้ส่งหลายพิกัดใน request เดียวแทนการ loop /reverse. ลอง: ชุด 3 จุดต่างภูมิภาค และขยายได้ถึง 1,000 จุด",
 					"request": {
 						"method": "POST",
-						"header": [{ "key": "Content-Type", "value": "application/json" }],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
 							"raw": "[\n  { \"lng\": 100.5018, \"lat\": 13.7563 },\n  { \"lng\": 98.9853,  \"lat\": 18.7883 },\n  { \"lng\": 102.8339, \"lat\": 16.4419 }\n]"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/reverse/batch",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "reverse", "batch"]
-						},
-						"description": "Rate-limited: 10 req/min/IP. รับสูงสุด 1,000 จุดต่อ request (~80–150 ms)"
-					}
-				},
-				{
-					"name": "Get Area (Reverse + Boundary in 1 Round-trip)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/geo/areas?lat=13.7563&lng=100.5018&level=sub_district&simplified=true",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "areas"],
-							"query": [
-								{ "key": "lat", "value": "13.7563" },
-								{ "key": "lng", "value": "100.5018" },
-								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district" },
-								{ "key": "simplified", "value": "true" }
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"reverse",
+								"batch"
 							]
 						},
-						"description": "สำหรับ map tap: reverse geocode + boundary polygon ใน 1 round-trip"
-					}
+						"description": "Rate-limited: 10 req/min/IP. รับสูงสุด 1,000 จุดต่อ request (~80–150 ms)"
+					},
+					"response": [
+						{
+							"name": "200 — Batch: 3 mixed points",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/reverse/batch",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"reverse",
+										"batch"
+									]
+								},
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  { \"lng\": 100.5018, \"lat\": 13.7563 },\n  { \"lng\": 98.9853,  \"lat\": 18.7883 },\n  { \"lng\": 102.8339, \"lat\": 16.4419 }\n]"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"lng\": 100.5018,\n      \"lat\": 13.7563,\n      \"match\": {\n        \"pcode\": \"TH100107\",\n        \"name_th\": \"บวรนิเวศ\",\n        \"name_en\": \"Bowon Niwet\",\n        \"level\": \"sub_district\"\n      },\n      \"hierarchy\": {\n        \"province\": {\n          \"pcode\": \"TH10\",\n          \"name_th\": \"กรุงเทพมหานคร\",\n          \"name_en\": \"Bangkok\",\n          \"region\": \"central\"\n        },\n        \"district\": {\n          \"pcode\": \"TH1001\",\n          \"name_th\": \"พระนคร\",\n          \"name_en\": \"Phra Nakhon\"\n        },\n        \"sub_district\": {\n          \"pcode\": \"TH100107\",\n          \"name_th\": \"บวรนิเวศ\",\n          \"name_en\": \"Bowon Niwet\",\n          \"zip_code\": \"10200\"\n        }\n      },\n      \"address_line_th\": \"แขวงบวรนิเวศ เขตพระนคร กรุงเทพมหานคร 10200\",\n      \"address_line_en\": \"Bowon Niwet, Phra Nakhon, Bangkok 10200\"\n    },\n    {\n      \"lng\": 98.9853,\n      \"lat\": 18.7883,\n      \"match\": {\n        \"pcode\": \"TH500102\",\n        \"name_th\": \"พระสิงห์\",\n        \"name_en\": \"Phra Sing\",\n        \"level\": \"sub_district\"\n      },\n      \"hierarchy\": {\n        \"province\": {\n          \"pcode\": \"TH50\",\n          \"name_th\": \"เชียงใหม่\",\n          \"name_en\": \"Chiang Mai\",\n          \"region\": \"north\"\n        },\n        \"district\": {\n          \"pcode\": \"TH5001\",\n          \"name_th\": \"เมืองเชียงใหม่\",\n          \"name_en\": \"Mueang Chiang Mai\"\n        },\n        \"sub_district\": {\n          \"pcode\": \"TH500102\",\n          \"name_th\": \"พระสิงห์\",\n          \"name_en\": \"Phra Sing\",\n          \"zip_code\": \"50200\"\n        }\n      },\n      \"address_line_th\": \"ตำบลพระสิงห์ อำเภอเมืองเชียงใหม่ จังหวัดเชียงใหม่ 50200\",\n      \"address_line_en\": \"Phra Sing, Mueang Chiang Mai, Chiang Mai 50200\"\n    },\n    {\n      \"lng\": 102.8339,\n      \"lat\": 16.4419,\n      \"match\": {\n        \"pcode\": \"TH400101\",\n        \"name_th\": \"ในเมือง\",\n        \"name_en\": \"Nai Mueang\",\n        \"level\": \"sub_district\"\n      },\n      \"hierarchy\": {\n        \"province\": {\n          \"pcode\": \"TH40\",\n          \"name_th\": \"ขอนแก่น\",\n          \"name_en\": \"Khon Kaen\",\n          \"region\": \"northeast\"\n        },\n        \"district\": {\n          \"pcode\": \"TH4001\",\n          \"name_th\": \"เมืองขอนแก่น\",\n          \"name_en\": \"Mueang Khon Kaen\"\n        },\n        \"sub_district\": {\n          \"pcode\": \"TH400101\",\n          \"name_th\": \"ในเมือง\",\n          \"name_en\": \"Nai Mueang\",\n          \"zip_code\": \"40000\"\n        }\n      },\n      \"address_line_th\": \"ตำบลในเมือง อำเภอเมืองขอนแก่น จังหวัดขอนแก่น 40000\",\n      \"address_line_en\": \"Nai Mueang, Mueang Khon Kaen, Khon Kaen 40000\"\n    }\n  ]\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "6. Search & Autocomplete",
+			"name": "6. Search & Discovery",
+			"description": "ไล่อ่านจาก prefix autocomplete -> fuzzy search -> GeoJSON find เพื่อค่อย ๆ ขยับจากช่องค้นหาไปสู่ผลลัพธ์และ map jump-to-result",
 			"item": [
 				{
-					"name": "Search (Trigram Fuzzy)",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/geo/search?q=บางรัก&limit=10",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "search"],
-							"query": [
-								{ "key": "q", "value": "บางรัก", "description": "คำค้นหา (ขั้นต่ำ 2 ตัวอักษร, สูงสุด 50 ผล)" },
-								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district", "disabled": true },
-								{ "key": "lang", "value": "th", "description": "th | en", "disabled": true },
-								{ "key": "limit", "value": "10" }
-							]
-						}
-					}
-				},
-				{
 					"name": "Autocomplete (Prefix Typeahead)",
+					"description": "ใช้ทำ prefix typeahead สำหรับช่องค้นหา. ลอง: q=บาง, q=Bang&lang=en หรือ q=เมือง&level=district",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/autocomplete?q=บาง&limit=8",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "autocomplete"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"autocomplete"
+							],
 							"query": [
-								{ "key": "q", "value": "บาง" },
-								{ "key": "level", "value": "sub_district", "disabled": true },
-								{ "key": "lang", "value": "th", "disabled": true },
-								{ "key": "limit", "value": "8" }
+								{
+									"key": "q",
+									"value": "บาง",
+									"description": "prefix ขั้นต่ำ 1 ตัวอักษร"
+								},
+								{
+									"key": "level",
+									"value": "sub_district",
+									"description": "province | district | sub_district",
+									"disabled": true
+								},
+								{
+									"key": "lang",
+									"value": "en",
+									"description": "th (default) | en",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "8",
+									"description": "จำนวนผลลัพธ์สูงสุด (max 20)"
+								}
 							]
 						},
 						"description": "Prefix typeahead, cache 5 min. ใช้ debounce 200–300ms ฝั่ง client"
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Default prefix: q=บาง",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/autocomplete?q=บาง&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "บาง"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH120202\",\n      \"name_th\": \"บางกรวย\",\n      \"name_en\": \"Bang Kruai\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH240208\",\n      \"name_th\": \"บางกระเจ็ด\",\n      \"name_en\": \"Bang Krachet\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH740116\",\n      \"name_th\": \"บางกระเจ้า\",\n      \"name_en\": \"Bang Krachao\",\n      \"level\": \"sub_district\"\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — English prefix: q=Bang&lang=en",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/autocomplete?q=Bang&lang=en&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "Bang"
+										},
+										{
+											"key": "lang",
+											"value": "en"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH840105\",\n      \"name_th\": \"บางใบไม้\",\n      \"name_en\": \"Bang Bai Mai\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH102503\",\n      \"name_th\": \"บางบำหรุ\",\n      \"name_en\": \"Bang Bamru\",\n      \"level\": \"sub_district\"\n    },\n    {\n      \"pcode\": \"TH140501\",\n      \"name_th\": \"บางบาล\",\n      \"name_en\": \"Bang Ban\",\n      \"level\": \"sub_district\"\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: q=เมือง&level=district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/autocomplete?q=เมือง&level=district&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "เมือง"
+										},
+										{
+											"key": "level",
+											"value": "district"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH8101\",\n      \"name_th\": \"เมืองกระบี่\",\n      \"name_en\": \"Mueang Krabi\",\n      \"level\": \"district\"\n    },\n    {\n      \"pcode\": \"TH7101\",\n      \"name_th\": \"เมืองกาญจนบุรี\",\n      \"name_en\": \"Mueang Kanchanaburi\",\n      \"level\": \"district\"\n    },\n    {\n      \"pcode\": \"TH4601\",\n      \"name_th\": \"เมืองกาฬสินธุ์\",\n      \"name_en\": \"Mueang Kalasin\",\n      \"level\": \"district\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: missing q",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/autocomplete?limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"autocomplete"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"query string too short (min 2 chars)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"query string too short (min 2 chars)\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Search (Trigram Fuzzy)",
+					"description": "ใช้ค้นหาแบบ fuzzy จากชื่อ TH/EN. ลอง: q=บางรัก, q=Bangkok&lang=en หรือ q=เชียง&level=province",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/search?q=บางรัก&limit=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"search"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": "บางรัก",
+									"description": "คำค้นหา (ขั้นต่ำ 2 ตัวอักษร, fuzzy trigram, สูงสุด 50 ผล)"
+								},
+								{
+									"key": "level",
+									"value": "sub_district",
+									"description": "province | district | sub_district (ค้นทุก level ถ้าไม่ระบุ)",
+									"disabled": true
+								},
+								{
+									"key": "lang",
+									"value": "en",
+									"description": "th (default) | en — ภาษาของผลลัพธ์",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "จำนวนผลลัพธ์สูงสุด (max 50)"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 — Default query: q=บางรัก",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/search?q=บางรัก&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "บางรัก"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100404\",\n      \"name_th\": \"บางรัก\",\n      \"name_en\": \"Bang Rak\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"บางรัก\",\n      \"zip_code\": \"10500\",\n      \"score\": 1\n    },\n    {\n      \"pcode\": \"TH920109\",\n      \"name_th\": \"บางรัก\",\n      \"name_en\": \"Bang Rak\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"เมืองตรัง\",\n      \"zip_code\": \"92000\",\n      \"score\": 1\n    },\n    {\n      \"pcode\": \"TH120403\",\n      \"name_th\": \"บางรักใหญ่\",\n      \"name_en\": \"Bang Rak Yai\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"บางบัวทอง\",\n      \"zip_code\": \"11110\",\n      \"score\": 0.5454545617103577\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — English results: q=Bangkok&lang=en",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/search?q=Bangkok&lang=en&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "Bangkok"
+										},
+										{
+											"key": "lang",
+											"value": "en"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH102402\",\n      \"name_th\": \"บางปะกอก\",\n      \"name_en\": \"Bang Pakok\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"ราษฎร์บูรณะ\",\n      \"zip_code\": \"10140\",\n      \"score\": 0.4615384638309479\n    },\n    {\n      \"pcode\": \"TH340412\",\n      \"name_th\": \"บ้านกอก\",\n      \"name_en\": \"Ban Kok\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"เขื่องใน\",\n      \"zip_code\": \"34320\",\n      \"score\": 0.4545454680919647\n    },\n    {\n      \"pcode\": \"TH360601\",\n      \"name_th\": \"บ้านกอก\",\n      \"name_en\": \"Ban Kok\",\n      \"level\": \"sub_district\",\n      \"parent_th\": \"จัตุรัส\",\n      \"zip_code\": \"36130\",\n      \"score\": 0.4545454680919647\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: level=district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/search?q=บางรัก&level=district&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "บางรัก"
+										},
+										{
+											"key": "level",
+											"value": "district"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH1004\",\n      \"name_th\": \"บางรัก\",\n      \"name_en\": \"Bang Rak\",\n      \"level\": \"district\",\n      \"parent_th\": \"กรุงเทพมหานคร\",\n      \"score\": 1\n    },\n    {\n      \"pcode\": \"TH6504\",\n      \"name_th\": \"บางระกำ\",\n      \"name_en\": \"Bang Rakam\",\n      \"level\": \"district\",\n      \"parent_th\": \"พิษณุโลก\",\n      \"score\": 0.3636363744735718\n    },\n    {\n      \"pcode\": \"TH1702\",\n      \"name_th\": \"บางระจัน\",\n      \"name_en\": \"Bang Rachan\",\n      \"level\": \"district\",\n      \"parent_th\": \"สิงห์บุรี\",\n      \"score\": 0.3333333432674408\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Filter: q=เชียง&level=province",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/search?q=เชียง&level=province&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "เชียง"
+										},
+										{
+											"key": "level",
+											"value": "province"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH50\",\n      \"name_th\": \"เชียงใหม่\",\n      \"name_en\": \"Chiang Mai\",\n      \"level\": \"province\",\n      \"score\": 0.5\n    },\n    {\n      \"pcode\": \"TH57\",\n      \"name_th\": \"เชียงราย\",\n      \"name_en\": \"Chiang Rai\",\n      \"level\": \"province\",\n      \"score\": 0.5\n    }\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: q too short",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/search?q=ก&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"search"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "ก"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"query string too short (min 2 chars)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"query string too short (min 2 chars)\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Find (pcode / zip / ชื่อ → GeoJSON FeatureCollection)",
+					"description": "ใช้แปลง pcode, ZIP หรือชื่อเป็น GeoJSON FeatureCollection. ถ้าไม่พบจะได้ FeatureCollection ว่าง และถ้าไม่ส่ง q จะได้ 400",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/find?q=บางรัก&simplified=true&limit=5",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "find"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"find"
+							],
 							"query": [
-								{ "key": "q", "value": "บางรัก", "description": "pcode / zip / ชื่อ" },
-								{ "key": "simplified", "value": "true" },
-								{ "key": "limit", "value": "5" }
+								{
+									"key": "q",
+									"value": "บางรัก",
+									"description": "pcode / zip / ชื่อ TH หรือ EN"
+								},
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "simplified geometry"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"description": "จำนวนผลลัพธ์สูงสุด"
+								}
 							]
 						},
 						"description": "ตอบ raw GeoJSON FeatureCollection (ไม่มี envelope)"
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Name query: q=บางรัก",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/find?q=บางรัก&simplified=true&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"find"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "บางรัก"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"FeatureCollection\",\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"level\": \"district\",\n        \"pcode\": \"TH1004\",\n        \"score\": 1,\n        \"name_en\": \"Bang Rak\",\n        \"name_th\": \"บางรัก\",\n        \"province_pcode\": \"TH10\"\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"level\": \"sub_district\",\n        \"pcode\": \"TH920109\",\n        \"score\": 1,\n        \"name_en\": \"Bang Rak\",\n        \"name_th\": \"บางรัก\",\n        \"zip_code\": \"92000\",\n        \"district_pcode\": \"TH9201\"\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"level\": \"sub_district\",\n        \"pcode\": \"TH100404\",\n        \"score\": 1,\n        \"name_en\": \"Bang Rak\",\n        \"name_th\": \"บางรัก\",\n        \"zip_code\": \"10500\",\n        \"district_pcode\": \"TH1004\"\n      }\n    }\n  ]\n}"
+						},
+						{
+							"name": "200 — ZIP query: q=10200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/find?q=10200&simplified=true&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"find"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "10200"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"FeatureCollection\",\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH100101\",\n        \"district_pcode\": \"TH1001\",\n        \"name_th\": \"พระบรมมหาราชวัง\",\n        \"name_en\": \"Phraborom Maharatchawang\",\n        \"zip_code\": \"10200\",\n        \"level\": \"sub_district\"\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH100102\",\n        \"district_pcode\": \"TH1001\",\n        \"name_th\": \"วังบูรพาภิรมย์\",\n        \"name_en\": \"Wang Burapha Phirom\",\n        \"zip_code\": \"10200\",\n        \"level\": \"sub_district\"\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH100103\",\n        \"district_pcode\": \"TH1001\",\n        \"name_th\": \"วัดราชบพิธ\",\n        \"name_en\": \"Wat Ratchabophit\",\n        \"zip_code\": \"10200\",\n        \"level\": \"sub_district\"\n      }\n    }\n  ]\n}"
+						},
+						{
+							"name": "200 — PCODE query: q=TH10",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/find?q=TH10&simplified=true&limit=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"find"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "TH10"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"FeatureCollection\",\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH10\",\n        \"name_th\": \"กรุงเทพมหานคร\",\n        \"name_en\": \"Bangkok\",\n        \"region\": \"central\",\n        \"area_sqkm\": 1571.3713633882228,\n        \"centroid_lng\": 100.6030293111107,\n        \"centroid_lat\": 13.72436412050007,\n        \"is_coastal\": true,\n        \"level\": \"province\"\n      }\n    }\n  ]\n}"
+						},
+						{
+							"name": "200 — Empty result: q=narnia",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/find?q=narnia&simplified=true&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"find"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "narnia"
+										},
+										{
+											"key": "simplified",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"FeatureCollection\",\n  \"features\": []\n}"
+						},
+						{
+							"name": "400 — Validation: q is required",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/find?simplified=true&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"find"
+									],
+									"query": [
+										{
+											"key": "simplified",
+											"value": "true"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"q is required\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"q is required\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "7. Spatial (เชิงพื้นที่)",
+			"name": "7. Spatial Queries (เชิงพื้นที่)",
+			"description": "รวม spatial query แบบ radius และ viewport bounding box สำหรับ map, geofilter และ nearby search",
 			"item": [
 				{
 					"name": "Search Within Radius",
+					"description": "ใช้ค้นหาหน่วยปกครองในรัศมีจากจุดอ้างอิง. ลอง: radius_km=10&level=sub_district, radius_km=5&level=district หรือ radius_km=50&level=province",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=10&level=sub_district&limit=50",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "within"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"within"
+							],
 							"query": [
-								{ "key": "lat", "value": "13.7563" },
-								{ "key": "lng", "value": "100.5018" },
-								{ "key": "radius_km", "value": "10", "description": "รัศมี 1–200 km" },
-								{ "key": "level", "value": "sub_district", "description": "province | district | sub_district" },
-								{ "key": "limit", "value": "50" }
+								{
+									"key": "lat",
+									"value": "13.7563",
+									"description": "ละติจูด (WGS84)"
+								},
+								{
+									"key": "lng",
+									"value": "100.5018",
+									"description": "ลองจิจูด (WGS84)"
+								},
+								{
+									"key": "radius_km",
+									"value": "10",
+									"description": "รัศมี 1–200 km"
+								},
+								{
+									"key": "level",
+									"value": "sub_district",
+									"description": "province | district | sub_district"
+								},
+								{
+									"key": "limit",
+									"value": "50",
+									"description": "จำนวนผลลัพธ์สูงสุด (max 500)"
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Radius: 10 km, level=sub_district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=10&level=sub_district&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"within"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "radius_km",
+											"value": "10"
+										},
+										{
+											"key": "level",
+											"value": "sub_district"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100107\",\n      \"name_th\": \"บวรนิเวศ\",\n      \"name_en\": \"Bowon Niwet\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0.15871450723,\n      \"lng\": 100.50195016712357,\n      \"lat\": 13.757727021000136\n    },\n    {\n      \"pcode\": \"TH100106\",\n      \"name_th\": \"เสาชิงช้า\",\n      \"name_en\": \"Sao Chingcha\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0.34113969732,\n      \"lng\": 100.50035908809862,\n      \"lat\": 13.753557083500112\n    },\n    {\n      \"pcode\": \"TH100105\",\n      \"name_th\": \"ศาลเจ้าพ่อเสือ\",\n      \"name_en\": \"San Chaopho Suea\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0.56868181478,\n      \"lng\": 100.49715688680796,\n      \"lat\": 13.753887301500072\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Radius: 50 km, level=province",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=50&level=province&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"within"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "radius_km",
+											"value": "50"
+										},
+										{
+											"key": "level",
+											"value": "province"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH10\",\n      \"name_th\": \"กรุงเทพมหานคร\",\n      \"name_en\": \"Bangkok\",\n      \"level\": \"province\",\n      \"dist_km\": 11.504391496099998,\n      \"lng\": 100.6030293111107,\n      \"lat\": 13.72436412050007\n    },\n    {\n      \"pcode\": \"TH12\",\n      \"name_th\": \"นนทบุรี\",\n      \"name_en\": \"Nonthaburi\",\n      \"level\": \"province\",\n      \"dist_km\": 26.33209521049,\n      \"lng\": 100.38395192374945,\n      \"lat\": 13.964595601500093\n    },\n    {\n      \"pcode\": \"TH11\",\n      \"name_th\": \"สมุทรปราการ\",\n      \"name_en\": \"Samut Prakan\",\n      \"level\": \"province\",\n      \"dist_km\": 29.344249110659998,\n      \"lng\": 100.71966990874414,\n      \"lat\": 13.598305425500087\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Radius: 5 km, level=district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=5&level=district&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"within"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "radius_km",
+											"value": "5"
+										},
+										{
+											"key": "level",
+											"value": "district"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH1001\",\n      \"name_th\": \"พระนคร\",\n      \"name_en\": \"Phra Nakhon\",\n      \"level\": \"district\",\n      \"dist_km\": 0.53624471097,\n      \"lng\": 100.49688332097816,\n      \"lat\": 13.755671977000105\n    },\n    {\n      \"pcode\": \"TH1008\",\n      \"name_th\": \"ป้อมปราบศัตรูพ่าย\",\n      \"name_en\": \"Pom Prap Sattru Phai\",\n      \"level\": \"district\",\n      \"dist_km\": 1.16229817562,\n      \"lng\": 100.51103694157243,\n      \"lat\": 13.750929689500055\n    },\n    {\n      \"pcode\": \"TH1013\",\n      \"name_th\": \"สัมพันธวงศ์\",\n      \"name_en\": \"Samphanthawong\",\n      \"level\": \"district\",\n      \"dist_km\": 2.15036114062,\n      \"lng\": 100.50880819514094,\n      \"lat\": 13.738111190500035\n    }\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: invalid radius_km",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/within?lat=13.7563&lng=100.5018&radius_km=999&level=sub_district&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"within"
+									],
+									"query": [
+										{
+											"key": "lat",
+											"value": "13.7563"
+										},
+										{
+											"key": "lng",
+											"value": "100.5018"
+										},
+										{
+											"key": "radius_km",
+											"value": "999"
+										},
+										{
+											"key": "level",
+											"value": "sub_district"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid radius (1 km – 200 km)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid radius (1 km – 200 km)\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Search by Bounding Box",
+					"description": "ใช้ค้นหาหน่วยปกครองภายใน viewport ของแผนที่. ลอง: Bangkok bbox ที่ level=sub_district หรือ district",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/bbox?minLng=100.4&minLat=13.6&maxLng=100.6&maxLat=13.9&level=sub_district&limit=100",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "bbox"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"bbox"
+							],
 							"query": [
-								{ "key": "minLng", "value": "100.4" },
-								{ "key": "minLat", "value": "13.6" },
-								{ "key": "maxLng", "value": "100.6" },
-								{ "key": "maxLat", "value": "13.9" },
-								{ "key": "level", "value": "sub_district" },
-								{ "key": "limit", "value": "100" }
+								{
+									"key": "minLng",
+									"value": "100.4",
+									"description": "ขอบซ้าย (longitude ตะวันตก)"
+								},
+								{
+									"key": "minLat",
+									"value": "13.6",
+									"description": "ขอบล่าง (latitude ใต้)"
+								},
+								{
+									"key": "maxLng",
+									"value": "100.6",
+									"description": "ขอบขวา (longitude ตะวันออก)"
+								},
+								{
+									"key": "maxLat",
+									"value": "13.9",
+									"description": "ขอบบน (latitude เหนือ)"
+								},
+								{
+									"key": "level",
+									"value": "sub_district",
+									"description": "province | district | sub_district"
+								},
+								{
+									"key": "limit",
+									"value": "100",
+									"description": "จำนวนผลลัพธ์สูงสุด (max 1000)"
+								}
 							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Viewport: Bangkok, level=sub_district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/bbox?minLng=100.4&minLat=13.6&maxLng=100.6&maxLat=13.9&level=sub_district&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"bbox"
+									],
+									"query": [
+										{
+											"key": "minLng",
+											"value": "100.4"
+										},
+										{
+											"key": "minLat",
+											"value": "13.6"
+										},
+										{
+											"key": "maxLng",
+											"value": "100.6"
+										},
+										{
+											"key": "maxLat",
+											"value": "13.9"
+										},
+										{
+											"key": "level",
+											"value": "sub_district"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH100101\",\n      \"name_th\": \"พระบรมมหาราชวัง\",\n      \"name_en\": \"Phraborom Maharatchawang\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0,\n      \"lng\": 100.49197306049518,\n      \"lat\": 13.751552138000108\n    },\n    {\n      \"pcode\": \"TH100102\",\n      \"name_th\": \"วังบูรพาภิรมย์\",\n      \"name_en\": \"Wang Burapha Phirom\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0,\n      \"lng\": 100.49894806595492,\n      \"lat\": 13.743427853500094\n    },\n    {\n      \"pcode\": \"TH100103\",\n      \"name_th\": \"วัดราชบพิธ\",\n      \"name_en\": \"Wat Ratchabophit\",\n      \"level\": \"sub_district\",\n      \"dist_km\": 0,\n      \"lng\": 100.49902969166848,\n      \"lat\": 13.750375024500073\n    },\n    \"...(2 more)\"\n  ]\n}"
+						},
+						{
+							"name": "200 — Viewport: Bangkok, level=district",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/bbox?minLng=100.4&minLat=13.6&maxLng=100.6&maxLat=13.9&level=district&limit=3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"bbox"
+									],
+									"query": [
+										{
+											"key": "minLng",
+											"value": "100.4"
+										},
+										{
+											"key": "minLat",
+											"value": "13.6"
+										},
+										{
+											"key": "maxLng",
+											"value": "100.6"
+										},
+										{
+											"key": "maxLat",
+											"value": "13.9"
+										},
+										{
+											"key": "level",
+											"value": "district"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"pcode\": \"TH1001\",\n      \"name_th\": \"พระนคร\",\n      \"name_en\": \"Phra Nakhon\",\n      \"level\": \"district\",\n      \"dist_km\": 0,\n      \"lng\": 100.49688332097816,\n      \"lat\": 13.755671977000105\n    },\n    {\n      \"pcode\": \"TH1002\",\n      \"name_th\": \"ดุสิต\",\n      \"name_en\": \"Dusit\",\n      \"level\": \"district\",\n      \"dist_km\": 0,\n      \"lng\": 100.51462590889332,\n      \"lat\": 13.776478611500124\n    },\n    {\n      \"pcode\": \"TH1004\",\n      \"name_th\": \"บางรัก\",\n      \"name_en\": \"Bang Rak\",\n      \"level\": \"district\",\n      \"dist_km\": 0,\n      \"lng\": 100.52615736364075,\n      \"lat\": 13.728178953500134\n    }\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: invalid bbox",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/bbox?minLng=100.6&minLat=13.9&maxLng=100.4&maxLat=13.6&level=sub_district&limit=5",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"bbox"
+									],
+									"query": [
+										{
+											"key": "minLng",
+											"value": "100.6"
+										},
+										{
+											"key": "minLat",
+											"value": "13.9"
+										},
+										{
+											"key": "maxLng",
+											"value": "100.4"
+										},
+										{
+											"key": "maxLat",
+											"value": "13.6"
+										},
+										{
+											"key": "level",
+											"value": "sub_district"
+										},
+										{
+											"key": "limit",
+											"value": "5"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid bbox\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid bbox\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
 			"name": "8. Map Data (GeoJSON & Vector Tiles)",
+			"description": "รวม country outline, whole-country FeatureCollection และ vector tiles สำหรับใช้ต่อกับ MapLibre หรือ Mapbox",
 			"item": [
 				{
 					"name": "Get Thailand Country Outline",
+					"description": "ดึงขอบเขตประเทศไทยทั้งประเทศเป็น GeoJSON Feature. ใช้ simplified=true สำหรับ preload หรือ preview",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/country?simplified=true",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "country"],
-							"query": [{ "key": "simplified", "value": "true", "description": "~50 KB" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"country"
+							],
+							"query": [
+								{
+									"key": "simplified",
+									"value": "true",
+									"description": "true ~50 KB | false ~3 MB"
+								}
+							]
 						},
 						"description": "GeoJSON Feature ขอบเขตประเทศไทย, cache 24h immutable"
-					}
+					},
+					"response": [
+						{
+							"name": "200 — Country outline simplified",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/country?simplified=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"country"
+									],
+									"query": [
+										{
+											"key": "simplified",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"Feature\",\n  \"geometry\": {\n    \"type\": \"MultiPolygon\",\n    \"coordinates\": \"[...omitted...]\"\n  },\n  \"properties\": {\n    \"iso_a2\": \"TH\",\n    \"name_th\": \"ประเทศไทย\",\n    \"name_en\": \"Thailand\",\n    \"province_count\": 77\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Whole-level FeatureCollection",
+					"description": "ดึง FeatureCollection ทั้งประเทศตาม level. province ใช้งานง่ายที่สุด ส่วน district และ sub_district payload ใหญ่มากจึงควร cache",
 					"request": {
 						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/geo+json" }],
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/geo+json"
+							}
+						],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/geojson/:level",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "geojson", ":level"],
-							"variable": [{ "key": "level", "value": "province", "description": "province | district | sub_district" }]
-						},
-						"description": "GeoJSON FeatureCollection ทั้งประเทศ (heavy). แนะนำ cache ใน IndexedDB"
-					}
-				},
-				{
-					"name": "Get Vector Tile (MVT)",
-					"request": {
-						"method": "GET",
-						"header": [{ "key": "Accept", "value": "application/vnd.mapbox-vector-tile" }],
-						"url": {
-							"raw": "{{base_url}}/api/v1/geo/tiles/:level/:z/:x/:y",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "tiles", ":level", ":z", ":x", ":y"],
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"geojson",
+								":level"
+							],
 							"variable": [
-								{ "key": "level", "value": "province", "description": "province | district | sub_district" },
-								{ "key": "z", "value": "10" },
-								{ "key": "x", "value": "785" },
-								{ "key": "y", "value": "472" }
+								{
+									"key": "level",
+									"value": "province",
+									"description": "province | district | sub_district\n⚠️ district/sub_district ไฟล์ใหญ่มาก แนะนำ cache IndexedDB"
+								}
 							]
 						},
-						"description": "Mapbox Vector Tile (binary), cache 12h immutable. TileJSON pattern: /tiles/{level}/{z}/{x}/{y}.mvt"
-					}
+						"description": "GeoJSON FeatureCollection ทั้งประเทศ (heavy). แนะนำ cache ใน IndexedDB"
+					},
+					"response": [
+						{
+							"name": "200 — province FeatureCollection (truncated)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/geojson/province",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"geojson",
+										":level"
+									],
+									"variable": [
+										{
+											"key": "level",
+											"value": "province"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"type\": \"FeatureCollection\",\n  \"features\": [\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH16\",\n        \"name_th\": \"ลพบุรี\",\n        \"name_en\": \"Lop Buri\",\n        \"region\": \"central\",\n        \"is_coastal\": false\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH13\",\n        \"name_th\": \"ปทุมธานี\",\n        \"name_en\": \"Pathum Thani\",\n        \"region\": \"central\",\n        \"is_coastal\": false\n      }\n    },\n    {\n      \"type\": \"Feature\",\n      \"geometry\": {\n        \"type\": \"Polygon\",\n        \"coordinates\": \"[...omitted...]\"\n      },\n      \"properties\": {\n        \"pcode\": \"TH15\",\n        \"name_th\": \"อ่างทอง\",\n        \"name_en\": \"Ang Thong\",\n        \"region\": \"central\",\n        \"is_coastal\": false\n      }\n    },\n    \"...(74 more)\"\n  ]\n}"
+						},
+						{
+							"name": "400 — Validation: invalid level",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/geo+json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/geojson/city",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"geojson",
+										":level"
+									],
+									"variable": [
+										{
+											"key": "level",
+											"value": "city"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid level (province | district | sub_district)\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid level (province | district | sub_district)\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Vector Tile (MVT) — ⚠️ 500 Server Error",
+					"description": "Mapbox Vector Tile สำหรับ MapLibre หรือ Mapbox ตาม pattern /tiles/:level/:z/:x/:y.mvt. ตอนนี้ server ยังตอบ 500 จึงเก็บตัวอย่าง error ไว้ให้",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.mapbox-vector-tile"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/tiles/:level/:z/:x/:y",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"tiles",
+								":level",
+								":z",
+								":x",
+								":y"
+							],
+							"variable": [
+								{
+									"key": "level",
+									"value": "province",
+									"description": "province | district | sub_district"
+								},
+								{
+									"key": "z",
+									"value": "10",
+									"description": "zoom level"
+								},
+								{
+									"key": "x",
+									"value": "797",
+									"description": "tile x (Bangkok z=10: x=797)"
+								},
+								{
+									"key": "y",
+									"value": "472",
+									"description": "tile y (Bangkok z=10: y=472)"
+								}
+							]
+						},
+						"description": "⚠️ ขณะนี้ endpoint นี้ return 500 Internal Server Error (bug บน server)\nMapbox Vector Tile (binary), cache 12h immutable. TileJSON pattern: /tiles/{level}/{z}/{x}/{y}.mvt"
+					},
+					"response": [
+						{
+							"name": "500 — Current server error",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.mapbox-vector-tile"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/tiles/province/10/797/472",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"tiles",
+										"province",
+										"10",
+										"797",
+										"472"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo service error\",\n  \"error\": {\n    \"code\": \"INTERNAL\",\n    \"message\": \"geo service error\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "9. Villages (หมู่บ้าน)",
+			"name": "9. Supplemental Data: Villages (หมู่บ้าน)",
+			"description": "ข้อมูลหมู่บ้านระดับ record สำหรับ use case ที่ต้องอ้างอิง DOPA village id หรือเชื่อมกับ sub-district",
 			"item": [
 				{
 					"name": "Get Village by main_id",
+					"description": "ดูรายละเอียดหมู่บ้านจาก main_id ในตาราง villages ใช้ตรวจ record รายตัวหรือเชื่อมกับ DOPA id โดย main_id ต้องเป็นตัวเลข",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/villages/:main_id",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "villages", ":main_id"],
-							"variable": [{ "key": "main_id", "value": "100101001", "description": "รหัสหมู่บ้าน" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"villages",
+								":main_id"
+							],
+							"variable": [
+								{
+									"key": "main_id",
+									"value": "477014",
+									"description": "id ในตาราง villages (DOPA) เช่น 477014 = หมู่บ้านทวีลดา3 ต.โพธิ์แก้ว"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — village 477014",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/villages/477014",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"villages",
+										":main_id"
+									],
+									"variable": [
+										{
+											"key": "main_id",
+											"value": "477014"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"main_id\": 477014,\n    \"vill_id\": 477014,\n    \"vill_seq\": 7,\n    \"name_th\": \"ทวีลดา3\",\n    \"tam_name\": \"\",\n    \"amp_name\": \"\",\n    \"prv_name\": \"\",\n    \"sub_district_pcode\": \"TH130601\",\n    \"lng\": 0,\n    \"lat\": 0,\n    \"source\": \"villages\"\n  }\n}"
+						},
+						{
+							"name": "404 — Not found: main_id=999999999",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/villages/999999999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"villages",
+										":main_id"
+									],
+									"variable": [
+										{
+											"key": "main_id",
+											"value": "999999999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						},
+						{
+							"name": "400 — Validation: invalid id",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/villages/abc",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"villages",
+										":main_id"
+									],
+									"variable": [
+										{
+											"key": "main_id",
+											"value": "abc"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"invalid id\",\n  \"error\": {\n    \"code\": \"BAD_REQUEST\",\n    \"message\": \"invalid id\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "10. Hospitals (โรงพยาบาล)",
+			"name": "10. Supplemental Data: Hospitals (โรงพยาบาล)",
+			"description": "ข้อมูลโรงพยาบาลสำหรับงานค้นหาสถานพยาบาลหรือผูกกับหน่วยปกครองที่ใกล้เคียง",
 			"item": [
 				{
 					"name": "List Hospitals",
+					"description": "ค้นหารายชื่อโรงพยาบาลด้วย keyword ภาษาไทยหรืออังกฤษ. ลอง keyword=ศิริราช หรือ keyword=bangkok",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/hospitals?keyword=ศิริราช",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "hospitals"],
-							"query": [{ "key": "keyword", "value": "ศิริราช", "description": "ค้นหาชื่อโรงพยาบาล" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"hospitals"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "ศิริราช",
+									"description": "ค้นหาชื่อโรงพยาบาล (ภาษาไทย หรือ อังกฤษ)"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — keyword=ศิริราช",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/hospitals?keyword=ศิริราช",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"hospitals"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "ศิริราช"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name_th\": \"โรงพยาบาลภูมิพลอดุลยเดช\",\n      \"dcode\": \"1042\",\n      \"address\": \"171 ถ.พหลโยธิน แขวงคลองถนน เขตสายไหม  กทม.10220\",\n      \"tel\": \"0 - 2534-7000\",\n      \"num_bed\": 700,\n      \"type\": \"gov\",\n      \"lat\": 13.909067613192729,\n      \"lng\": 100.6182799760022,\n      \"sub_district_pcode\": \"TH104203\",\n      \"district_pcode\": \"TH1042\",\n      \"province_pcode\": \"TH10\",\n      \"scope\": \"bkk\"\n    },\n    {\n      \"id\": 2,\n      \"name_th\": \"โรงพยาบาลและสถาบันประสาทวิทยา\",\n      \"dcode\": \"1037\",\n      \"address\": \"312 ถ. ราชวิถี แขวงทุ่งพญาไท เขตราชเทวี กทม.\",\n      \"tel\": \"0 - 2246 - 9254\",\n      \"num_bed\": 350,\n      \"type\": \"gov\",\n      \"lat\": 13.768916204596325,\n      \"lng\": 100.5273276931111,\n      \"sub_district_pcode\": \"TH103701\",\n      \"district_pcode\": \"TH1037\",\n      \"province_pcode\": \"TH10\",\n      \"scope\": \"bkk\"\n    },\n    {\n      \"id\": 3,\n      \"name_th\": \"โรงพยาบาลพระมงกุฏเกล้า\",\n      \"dcode\": \"1037\",\n      \"address\": \"315 ถ.ราชวิถี ทุ่งพญาไท เขตราชเทวี กทม.10400\",\n      \"tel\": \"0 - 2246 - 1400-28\",\n      \"num_bed\": 1236,\n      \"type\": \"gov\",\n      \"lat\": 13.767325603464705,\n      \"lng\": 100.53352633408133,\n      \"sub_district_pcode\": \"TH103701\",\n      \"district_pcode\": \"TH1037\",\n      \"province_pcode\": \"TH10\",\n      \"scope\": \"bkk\"\n    },\n    \"...(118 more)\"\n  ]\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Hospital by ID",
+					"description": "ดูรายละเอียดโรงพยาบาลตาม id. ลอง id=1 หรือ id=15",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/hospitals/:id",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "hospitals", ":id"],
-							"variable": [{ "key": "id", "value": "10669" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"hospitals",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "id 1–121 เช่น id=15 = โรงพยาบาลศิริราช | id=1 = โรงพยาบาลภูมิพล"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — id=1 โรงพยาบาลภูมิพล",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/hospitals/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"hospitals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"id\": 1,\n    \"name_th\": \"โรงพยาบาลภูมิพลอดุลยเดช\",\n    \"dcode\": \"1042\",\n    \"address\": \"171 ถ.พหลโยธิน แขวงคลองถนน เขตสายไหม  กทม.10220\",\n    \"tel\": \"0 - 2534-7000\",\n    \"num_bed\": 700,\n    \"type\": \"gov\",\n    \"lat\": 13.909067613192729,\n    \"lng\": 100.6182799760022,\n    \"sub_district_pcode\": \"TH104203\",\n    \"district_pcode\": \"TH1042\",\n    \"province_pcode\": \"TH10\",\n    \"scope\": \"bkk\"\n  }\n}"
+						},
+						{
+							"name": "200 — id=15 โรงพยาบาลศิริราช",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/hospitals/15",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"hospitals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "15"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"id\": 15,\n    \"name_th\": \"โรงพยาบาลศิริราช\",\n    \"dcode\": \"1020\",\n    \"address\": \"2 ถ.พรานนก แขวงศิริราช เขตบางกอกน้อย กทม.10700\",\n    \"tel\": \"0 - 2411 - 4230-44\",\n    \"num_bed\": 2324,\n    \"type\": \"gov\",\n    \"lat\": 13.75691698218973,\n    \"lng\": 100.48369910222199,\n    \"sub_district_pcode\": \"TH102004\",\n    \"district_pcode\": \"TH1020\",\n    \"province_pcode\": \"TH10\",\n    \"scope\": \"bkk\"\n  }\n}"
+						},
+						{
+							"name": "404 — Not found: id=999",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/hospitals/999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"hospitals",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "11. Postal Codes & Special Admin Zones",
+			"name": "11. Reference Data: Postal Codes & Special Zones",
+			"description": "reference data เพิ่มเติมสำหรับ postal-code centroid summary และเขตปกครองพิเศษอย่าง BMA หรือ PATTAYA",
 			"item": [
 				{
 					"name": "Get Area by Postal Code",
+					"description": "ดูข้อมูลพื้นที่ที่ผูกกับรหัสไปรษณีย์ 5 หลัก เช่น จังหวัด อำเภอ และตำบลที่เกี่ยวข้อง. ตอนนี้ ZIP ที่ไม่รู้จักหรือ malformed จะคืน NOT_FOUND เหมือนกัน",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/postal-codes/:zip",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "postal-codes", ":zip"],
-							"variable": [{ "key": "zip", "value": "10200", "description": "รหัสไปรษณีย์ 5 หลัก" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"postal-codes",
+								":zip"
+							],
+							"variable": [
+								{
+									"key": "zip",
+									"value": "10200",
+									"description": "รหัสไปรษณีย์ 5 หลัก เช่น 10200=บางรัก | 50000=เชียงใหม่ | 83000=ภูเก็ต"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — ZIP 10200 บางรัก",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/postal-codes/10200",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"postal-codes",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "10200"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"zip_code\": \"10200\",\n    \"province_pcode\": \"TH10\",\n    \"province_name_th\": \"กรุงเทพมหานคร\",\n    \"province_name_en\": \"Bangkok\",\n    \"region_4\": \"central\",\n    \"region_9\": \"central\",\n    \"sub_district_count\": 12,\n    \"district_count\": 1,\n    \"centroid_lng\": 100.49795478618427,\n    \"centroid_lat\": 13.755343967132161,\n    \"notes\": \"\"\n  }\n}"
+						},
+						{
+							"name": "200 — ZIP 50000 เชียงใหม่",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/postal-codes/50000",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"postal-codes",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "50000"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"zip_code\": \"50000\",\n    \"province_pcode\": \"TH50\",\n    \"province_name_th\": \"เชียงใหม่\",\n    \"province_name_en\": \"Chiang Mai\",\n    \"region_4\": \"north\",\n    \"region_9\": \"north_upper\",\n    \"sub_district_count\": 5,\n    \"district_count\": 1,\n    \"centroid_lng\": 99.0192610514561,\n    \"centroid_lat\": 18.781932429758267,\n    \"notes\": \"\"\n  }\n}"
+						},
+						{
+							"name": "404 — Not found: ZIP 99999",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/postal-codes/99999",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"postal-codes",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "99999"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						},
+						{
+							"name": "404 — Unknown or malformed ZIP: ABCDE",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/postal-codes/ABCDE",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"postal-codes",
+										":zip"
+									],
+									"variable": [
+										{
+											"key": "zip",
+											"value": "ABCDE"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						}
+					]
 				},
 				{
 					"name": "Get Special Admin Zone",
+					"description": "ดูข้อมูลเขตปกครองพิเศษตาม code. ตอนนี้มี BMA และ PATTAYA",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/special-admin-zones/:code",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "special-admin-zones", ":code"],
-							"variable": [{ "key": "code", "value": "BKK", "description": "BKK = กรุงเทพฯ | PATTAYA = พัทยา" }]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"special-admin-zones",
+								":code"
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "BMA",
+									"description": "BMA = กรุงเทพมหานคร | PATTAYA = เมืองพัทยา (มีแค่ 2 records ในตาราง)"
+								}
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — BMA กรุงเทพมหานคร",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/special-admin-zones/BMA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"special-admin-zones",
+										":code"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "BMA"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"code\": \"BMA\",\n    \"name_th\": \"กรุงเทพมหานคร\",\n    \"name_en\": \"Bangkok\",\n    \"full_name_th\": \"กรุงเทพมหานคร (Bangkok Metropolitan Administration)\",\n    \"full_name_en\": \"Bangkok Metropolitan Administration\",\n    \"type\": \"metropolitan\",\n    \"level\": \"province\",\n    \"province_pcode\": \"TH10\",\n    \"district_pcode\": \"\",\n    \"notes\": \"ปกครองท้องถิ่นรูปแบบพิเศษระดับจังหวัด ตาม พ.ร.บ.ระเบียบบริหารราชการกรุงเทพมหานคร พ.ศ. 2528\"\n  }\n}"
+						},
+						{
+							"name": "200 — PATTAYA เมืองพัทยา",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/special-admin-zones/PATTAYA",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"special-admin-zones",
+										":code"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "PATTAYA"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"code\": \"PATTAYA\",\n    \"name_th\": \"เมืองพัทยา\",\n    \"name_en\": \"Pattaya City\",\n    \"full_name_th\": \"เมืองพัทยา\",\n    \"full_name_en\": \"Pattaya City\",\n    \"type\": \"city\",\n    \"level\": \"sub_district\",\n    \"province_pcode\": \"TH20\",\n    \"district_pcode\": \"TH2002\",\n    \"notes\": \"ปกครองท้องถิ่นรูปแบบพิเศษระดับเมือง ครอบคลุม ต.หนองปรือ อ.บางละมุง จ.ชลบุรี ตาม พ.ร.บ.ระเบียบบริหารราชการเมืองพัทยา พ.ศ. 2542\"\n  }\n}"
+						},
+						{
+							"name": "404 — Not found: code=XYZ",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/special-admin-zones/XYZ",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"special-admin-zones",
+										":code"
+									],
+									"variable": [
+										{
+											"key": "code",
+											"value": "XYZ"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": false,\n  \"message\": \"geo entity not found\",\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"geo entity not found\"\n  }\n}"
+						}
+					]
 				}
 			]
 		},
 		{
-			"name": "12. Stats & OpenAPI",
+			"name": "12. Dataset & Schemas",
+			"description": "เริ่มจาก OpenAPI schema สำหรับ import เข้า tooling หรือ code generation แล้วค่อยปิดท้ายด้วย dataset stats สำหรับ sizing และ planning",
 			"item": [
 				{
-					"name": "Get Dataset Stats",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/geo/stats",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "stats"]
-						},
-						"description": "สถิติชุดข้อมูล: จำนวน provinces / districts / sub-districts / villages (cache 6h)"
-					}
-				},
-				{
 					"name": "Get OpenAPI Spec (YAML)",
+					"description": "ดึงสเปก OpenAPI แบบ YAML สำหรับ import เข้า Swagger UI, Redoc หรือ generator",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/openapi.yaml",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "openapi.yaml"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"openapi.yaml"
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — OpenAPI YAML",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/openapi.yaml",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"openapi.yaml"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "yaml",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/yaml; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "basePath: /api/v1\ndefinitions:\n  github_com_Kidpech-code_my-api_internal_model.DiningType:\n    enum:\n      - buffet\n      - alacarte\n    type: string\ninfo:\n  title: My API Documentation\n  version: 2.4.3\n# ...(truncated)"
+						}
+					]
 				},
 				{
 					"name": "Get OpenAPI Spec (JSON)",
+					"description": "ดึงสเปก OpenAPI แบบ JSON สำหรับ tooling, codegen หรือ import เข้า Postman เพิ่มเติม",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/api/v1/geo/openapi.json",
-							"host": ["{{base_url}}"],
-							"path": ["api", "v1", "geo", "openapi.json"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"openapi.json"
+							]
 						}
-					}
+					},
+					"response": [
+						{
+							"name": "200 — OpenAPI JSON",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/openapi.json",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"openapi.json"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"swagger\": \"2.0\",\n  \"info\": {\n    \"title\": \"My API Documentation\",\n    \"version\": \"2.4.3\"\n  },\n  \"basePath\": \"/api/v1\",\n  \"paths\": {\n    \"/geo/provinces\": {\n      \"get\": {\n        \"summary\": \"List all 77 provinces (optionally with geometry)\"\n      }\n    },\n    \"...\": \"...\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Dataset Stats",
+					"description": "ดูสถิติรวมของ dataset เช่นจำนวน provinces, districts, sub_districts, villages และ breakdown ตาม region",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/geo/stats",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"geo",
+								"stats"
+							]
+						},
+						"description": "สถิติชุดข้อมูล: จำนวน provinces / districts / sub-districts / villages (cache 6h)"
+					},
+					"response": [
+						{
+							"name": "200 — Dataset Stats",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/geo/stats",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"geo",
+										"stats"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"success\": true,\n  \"message\": \"ok\",\n  \"data\": {\n    \"provinces\": 77,\n    \"districts\": 928,\n    \"sub_districts\": 7425,\n    \"total_area_sqkm\": 515415.58901996573,\n    \"coastal_provinces\": 23,\n    \"island_sub_districts\": 39,\n    \"regions\": [\n      {\n        \"region\": \"northeast\",\n        \"provinces\": 20,\n        \"area_sqkm\": 166961.17971168002\n      },\n      {\n        \"region\": \"north\",\n        \"provinces\": 9,\n        \"area_sqkm\": 96305.23707942164\n      },\n      {\n        \"region\": \"central\",\n        \"provinces\": 22,\n        \"area_sqkm\": 91069.18109645616\n      },\n      \"...(3 more)\"\n    ]\n  }\n}"
+						}
+					]
 				}
 			]
 		}

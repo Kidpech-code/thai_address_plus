@@ -15,9 +15,9 @@ import 'interceptors/rate_limit_retry_interceptor.dart';
 /// แต่เปิด public ไว้กรณีต้อง fine-tune หรือ inject mock dio ใน test.
 class ThaiGeoClient {
   ThaiGeoClient({ThaiGeoConfig? config, Dio? dio, CacheStore? cacheStore})
-    : config = config ?? const ThaiGeoConfig(),
-      cacheStore = cacheStore ?? MemoryCacheStore(),
-      _dio = dio ?? Dio() {
+      : config = config ?? const ThaiGeoConfig(),
+        cacheStore = cacheStore ?? MemoryCacheStore(),
+        _dio = dio ?? Dio() {
     _bootstrap();
   }
 
@@ -39,11 +39,13 @@ class ThaiGeoClient {
     _dio.interceptors
       ..clear()
       ..add(GzipHeadersInterceptor(userAgent: config.userAgent))
-      ..add(CacheInterceptor(config: config, store: cacheStore, ttlResolver: _resolveTtl))
+      ..add(CacheInterceptor(
+          config: config, store: cacheStore, ttlResolver: _resolveTtl))
       ..add(RateLimitRetryInterceptor(config, _dio));
 
     if (config.enableLogging) {
-      _dio.interceptors.add(LogInterceptor(requestBody: false, responseBody: false));
+      _dio.interceptors
+          .add(LogInterceptor(requestBody: false, responseBody: false));
     }
   }
 
@@ -51,12 +53,18 @@ class ThaiGeoClient {
   Duration? _resolveTtl(RequestOptions options) {
     final p = options.path;
     // GeoJSON / vector tile / country / find: 24h immutable
-    if (p.contains('/geojson') || p.contains('/tiles/') || p.endsWith('/country') || p.startsWith('/find')) {
+    if (p.contains('/geojson') ||
+        p.contains('/tiles/') ||
+        p.endsWith('/country') ||
+        p.startsWith('/find')) {
       return config.defaultStaleTime;
     }
     if (p.startsWith('/autocomplete')) return config.autocompleteStaleTime;
     if (p.startsWith('/search')) return config.searchStaleTime;
-    if (p.startsWith('/reverse') || p.startsWith('/within') || p.startsWith('/bbox') || p.startsWith('/areas')) {
+    if (p.startsWith('/reverse') ||
+        p.startsWith('/within') ||
+        p.startsWith('/bbox') ||
+        p.startsWith('/areas')) {
       return config.reverseStaleTime;
     }
     // Static lookups: provinces / districts / sub-districts / villages / zip / regions / stats
@@ -64,12 +72,19 @@ class ThaiGeoClient {
   }
 
   /// GET ที่ unwrap envelope ให้อัตโนมัติ. ใช้กับทุก endpoint ปกติ.
-  Future<T> getEnvelope<T>(String path, {Map<String, dynamic>? query, required T Function(Object? raw) decode, CancelToken? cancelToken}) async {
+  Future<T> getEnvelope<T>(String path,
+      {Map<String, dynamic>? query,
+      required T Function(Object? raw) decode,
+      CancelToken? cancelToken}) async {
     try {
-      final res = await _dio.get<dynamic>(path, queryParameters: _stripNulls(query), cancelToken: cancelToken);
+      final res = await _dio.get<dynamic>(path,
+          queryParameters: _stripNulls(query), cancelToken: cancelToken);
       final body = res.data;
       if (body is! Map<String, dynamic>) {
-        throw GeoApiException(code: GeoErrorCode.parse, message: 'Expected JSON object envelope, got ${body.runtimeType}', requestPath: path);
+        throw GeoApiException(
+            code: GeoErrorCode.parse,
+            message: 'Expected JSON object envelope, got ${body.runtimeType}',
+            requestPath: path);
       }
       final env = ApiEnvelope<T>.fromJson(body, decode);
       if (!env.isSuccess) {
@@ -81,7 +96,10 @@ class ThaiGeoClient {
         );
       }
       if (env.data == null) {
-        throw GeoApiException(code: GeoErrorCode.parse, message: 'Envelope success but data is null', requestPath: path);
+        throw GeoApiException(
+            code: GeoErrorCode.parse,
+            message: 'Envelope success but data is null',
+            requestPath: path);
       }
       return env.data as T;
     } on DioException catch (e) {
@@ -89,12 +107,19 @@ class ThaiGeoClient {
     } on GeoApiException {
       rethrow;
     } catch (e) {
-      throw GeoApiException(code: GeoErrorCode.parse, message: e.toString(), requestPath: path, cause: e);
+      throw GeoApiException(
+          code: GeoErrorCode.parse,
+          message: e.toString(),
+          requestPath: path,
+          cause: e);
     }
   }
 
   /// GET raw (สำหรับ GeoJSON / MVT ที่ไม่ใช้ envelope).
-  Future<T> getRaw<T>(String path, {Map<String, dynamic>? query, ResponseType responseType = ResponseType.json, CancelToken? cancelToken}) async {
+  Future<T> getRaw<T>(String path,
+      {Map<String, dynamic>? query,
+      ResponseType responseType = ResponseType.json,
+      CancelToken? cancelToken}) async {
     try {
       final res = await _dio.get<dynamic>(
         path,
@@ -103,7 +128,10 @@ class ThaiGeoClient {
         cancelToken: cancelToken,
       );
       if (res.data is! T) {
-        throw GeoApiException(code: GeoErrorCode.parse, message: 'Expected ${T}, got ${res.data.runtimeType}', requestPath: path);
+        throw GeoApiException(
+            code: GeoErrorCode.parse,
+            message: 'Expected ${T}, got ${res.data.runtimeType}',
+            requestPath: path);
       }
       return res.data as T;
     } on DioException catch (e) {
@@ -111,22 +139,33 @@ class ThaiGeoClient {
     } on GeoApiException {
       rethrow;
     } catch (e) {
-      throw GeoApiException(code: GeoErrorCode.parse, message: e.toString(), requestPath: path, cause: e);
+      throw GeoApiException(
+          code: GeoErrorCode.parse,
+          message: e.toString(),
+          requestPath: path,
+          cause: e);
     }
   }
 
   /// POST envelope (ใช้กับ /reverse/batch).
-  Future<T> postEnvelope<T>(String path, {required Object body, required T Function(Object? raw) decode, CancelToken? cancelToken}) async {
+  Future<T> postEnvelope<T>(String path,
+      {required Object body,
+      required T Function(Object? raw) decode,
+      CancelToken? cancelToken}) async {
     try {
       final res = await _dio.post<dynamic>(
         path,
         data: body,
         cancelToken: cancelToken,
-        options: Options(headers: {Headers.contentTypeHeader: 'application/json'}),
+        options:
+            Options(headers: {Headers.contentTypeHeader: 'application/json'}),
       );
       final raw = res.data;
       if (raw is! Map<String, dynamic>) {
-        throw GeoApiException(code: GeoErrorCode.parse, message: 'Expected JSON object envelope, got ${raw.runtimeType}', requestPath: path);
+        throw GeoApiException(
+            code: GeoErrorCode.parse,
+            message: 'Expected JSON object envelope, got ${raw.runtimeType}',
+            requestPath: path);
       }
       final env = ApiEnvelope<T>.fromJson(raw, decode);
       if (!env.isSuccess) {
@@ -138,7 +177,10 @@ class ThaiGeoClient {
         );
       }
       if (env.data == null) {
-        throw GeoApiException(code: GeoErrorCode.parse, message: 'Envelope success but data is null', requestPath: path);
+        throw GeoApiException(
+            code: GeoErrorCode.parse,
+            message: 'Envelope success but data is null',
+            requestPath: path);
       }
       return env.data as T;
     } on DioException catch (e) {
@@ -146,7 +188,11 @@ class ThaiGeoClient {
     } on GeoApiException {
       rethrow;
     } catch (e) {
-      throw GeoApiException(code: GeoErrorCode.parse, message: e.toString(), requestPath: path, cause: e);
+      throw GeoApiException(
+          code: GeoErrorCode.parse,
+          message: e.toString(),
+          requestPath: path,
+          cause: e);
     }
   }
 
@@ -179,11 +225,25 @@ class ThaiGeoClient {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return GeoApiException(code: GeoErrorCode.timeout, message: message ?? 'Request timed out', statusCode: status, requestPath: path, cause: e);
+        return GeoApiException(
+            code: GeoErrorCode.timeout,
+            message: message ?? 'Request timed out',
+            statusCode: status,
+            requestPath: path,
+            cause: e);
       case DioExceptionType.cancel:
-        return GeoApiException(code: GeoErrorCode.cancelled, message: 'Request cancelled', requestPath: path, cause: e);
+        return GeoApiException(
+            code: GeoErrorCode.cancelled,
+            message: 'Request cancelled',
+            requestPath: path,
+            cause: e);
       case DioExceptionType.connectionError:
-        return GeoApiException(code: GeoErrorCode.network, message: message ?? 'Network error', statusCode: status, requestPath: path, cause: e);
+        return GeoApiException(
+            code: GeoErrorCode.network,
+            message: message ?? 'Network error',
+            statusCode: status,
+            requestPath: path,
+            cause: e);
       case DioExceptionType.badResponse:
       case DioExceptionType.badCertificate:
       case DioExceptionType.unknown:
@@ -212,9 +272,24 @@ class ThaiGeoClient {
     final asInt = int.tryParse(v.trim());
     if (asInt != null) return Duration(seconds: asInt);
     // 2) RFC 1123: "Mon, 01 Jan 2024 00:00:00 GMT"
-    final m = RegExp(r'\w+,\s+(\d{1,2})\s+(\w{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+GMT').firstMatch(v.trim());
+    final m = RegExp(
+            r'\w+,\s+(\d{1,2})\s+(\w{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+GMT')
+        .firstMatch(v.trim());
     if (m != null) {
-      const months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12};
+      const months = {
+        'Jan': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Apr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Aug': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+      };
       final month = months[m.group(2)!];
       if (month != null) {
         final date = DateTime.utc(

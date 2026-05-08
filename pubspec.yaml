@@ -1,11 +1,27 @@
 name: thai_address_plus
 description: >-
-  Flutter SDK for Thailand Geographic API with caching &
-  a debounced address search widget.
-version: 0.1.4
+  Flutter SDK for Thailand Geographic API with caching, autocomplete,
+  and a ready-to-use address search widget.
+version: 1.0.0
 homepage: https://github.com/Kidpech-code/thai_address_plus
 repository: https://github.com/Kidpech-code/thai_address_plus
 issue_tracker: https://github.com/Kidpech-code/thai_address_plus/issues
+documentation: https://github.com/Kidpech-code/thai_address_plus/blob/main/docs/TH_GEO_API.md
+
+topics:
+  - thailand
+  - address
+  - autocomplete
+  - geojson
+  - maps
+
+screenshots:
+  - description: Search screen with Thai address autocomplete suggestions.
+    path: assets/images/1.png
+  - description: Cascading province, district, and sub-district dropdown flow.
+    path: assets/images/2.png
+  - description: OSM boundary preview for provinces, districts, and sub-districts.
+    path: assets/images/3.png
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

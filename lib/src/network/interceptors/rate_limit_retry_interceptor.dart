@@ -22,7 +22,8 @@ class RateLimitRetryInterceptor extends Interceptor {
   static const _attemptKey = '_thai_geo_retry_attempt';
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
     final req = err.requestOptions;
     final attempt = (req.extra[_attemptKey] as int?) ?? 0;
 
@@ -35,7 +36,10 @@ class RateLimitRetryInterceptor extends Interceptor {
 
     // ถ้า user cancel ระหว่าง delay → propagate cancel แทนที่จะยิง request ใหม่
     if (req.cancelToken?.isCancelled == true) {
-      return handler.next(DioException(requestOptions: req, type: DioExceptionType.cancel, message: 'Cancelled during retry delay'));
+      return handler.next(DioException(
+          requestOptions: req,
+          type: DioExceptionType.cancel,
+          message: 'Cancelled during retry delay'));
     }
 
     req.extra[_attemptKey] = attempt + 1;
@@ -53,7 +57,8 @@ class RateLimitRetryInterceptor extends Interceptor {
     // ห้าม retry สำหรับ POST /reverse/batch (rate limit แยก 10/min,
     // และเป็น mutation-ish call ที่ผู้ใช้ควรคุมเอง)
     final path = err.requestOptions.path;
-    if (err.requestOptions.method.toUpperCase() == 'POST' && path.contains('/reverse/batch')) {
+    if (err.requestOptions.method.toUpperCase() == 'POST' &&
+        path.contains('/reverse/batch')) {
       // อนุญาตเฉพาะกรณี network/timeout เท่านั้น
       switch (err.type) {
         case DioExceptionType.connectionError:
@@ -86,7 +91,8 @@ class RateLimitRetryInterceptor extends Interceptor {
     final ra = err.response?.headers.value('retry-after');
     final fromHeader = _parseRetryAfter(ra);
     if (fromHeader != null) {
-      final capped = fromHeader > config.maxRetryDelay ? config.maxRetryDelay : fromHeader;
+      final capped =
+          fromHeader > config.maxRetryDelay ? config.maxRetryDelay : fromHeader;
       return capped;
     }
 
@@ -105,9 +111,24 @@ class RateLimitRetryInterceptor extends Interceptor {
     final asInt = int.tryParse(value.trim());
     if (asInt != null) return Duration(seconds: asInt);
     // 2) RFC 1123 HTTP-date: "Mon, 01 Jan 2024 00:00:00 GMT"
-    final m = RegExp(r'\w+,\s+(\d{1,2})\s+(\w{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+GMT').firstMatch(value.trim());
+    final m = RegExp(
+            r'\w+,\s+(\d{1,2})\s+(\w{3})\s+(\d{4})\s+(\d{2}):(\d{2}):(\d{2})\s+GMT')
+        .firstMatch(value.trim());
     if (m != null) {
-      const months = {'Jan': 1, 'Feb': 2, 'Mar': 3, 'Apr': 4, 'May': 5, 'Jun': 6, 'Jul': 7, 'Aug': 8, 'Sep': 9, 'Oct': 10, 'Nov': 11, 'Dec': 12};
+      const months = {
+        'Jan': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Apr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Aug': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+      };
       final month = months[m.group(2)!];
       if (month != null) {
         final date = DateTime.utc(

@@ -33,18 +33,19 @@ class Province {
   final bool isCoastal;
 
   factory Province.fromJson(Map<String, dynamic> j) => Province(
-    pcode: (j['pcode'] ?? '').toString(),
-    nameTh: (j['name_th'] ?? '').toString(),
-    nameEn: (j['name_en'] ?? '').toString(),
-    region: (j['region'] ?? '').toString(),
-    areaSqkm: (j['area_sqkm'] as num?)?.toDouble() ?? 0,
-    centroidLng: (j['centroid_lng'] as num?)?.toDouble() ?? 0,
-    centroidLat: (j['centroid_lat'] as num?)?.toDouble() ?? 0,
-    bboxMinLng: (j['bbox_min_lng'] as num?)?.toDouble() ?? 0,
-    bboxMinLat: (j['bbox_min_lat'] as num?)?.toDouble() ?? 0,
-    bboxMaxLng: (j['bbox_max_lng'] as num?)?.toDouble() ?? 0,
-    bboxMaxLat: (j['bbox_max_lat'] as num?)?.toDouble() ?? 0,
-    distanceToBangkokKm: (j['distance_to_bangkok_km'] as num?)?.toDouble() ?? 0,
-    isCoastal: j['is_coastal'] == true,
-  );
+        pcode: (j['pcode'] ?? '').toString(),
+        nameTh: (j['name_th'] ?? '').toString(),
+        nameEn: (j['name_en'] ?? '').toString(),
+        region: (j['region'] ?? '').toString(),
+        areaSqkm: (j['area_sqkm'] as num?)?.toDouble() ?? 0,
+        centroidLng: (j['centroid_lng'] as num?)?.toDouble() ?? 0,
+        centroidLat: (j['centroid_lat'] as num?)?.toDouble() ?? 0,
+        bboxMinLng: (j['bbox_min_lng'] as num?)?.toDouble() ?? 0,
+        bboxMinLat: (j['bbox_min_lat'] as num?)?.toDouble() ?? 0,
+        bboxMaxLng: (j['bbox_max_lng'] as num?)?.toDouble() ?? 0,
+        bboxMaxLat: (j['bbox_max_lat'] as num?)?.toDouble() ?? 0,
+        distanceToBangkokKm:
+            (j['distance_to_bangkok_km'] as num?)?.toDouble() ?? 0,
+        isCoastal: j['is_coastal'] == true,
+      );
 }

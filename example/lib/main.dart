@@ -92,7 +92,8 @@ class _HomePageState extends State<HomePage> {
                             child: Text((v.mooNumber ?? i + 1).toString()),
                           ),
                           title: Text(v.nameTh),
-                          subtitle: Text('main_id ${v.mainId ?? '-'} • ${v.lat.toStringAsFixed(5)}, '
+                          subtitle: Text(
+                              'main_id ${v.mainId ?? '-'} • ${v.lat.toStringAsFixed(5)}, '
                               '${v.lng.toStringAsFixed(5)}'),
                         );
                       },

@@ -15,13 +15,15 @@ class _FakeAdapter implements HttpClientAdapter {
   void close({bool force = false}) {}
 
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<List<int>>? requestStream, Future<void>? cancelFuture) async {
+  Future<ResponseBody> fetch(RequestOptions options,
+      Stream<List<int>>? requestStream, Future<void>? cancelFuture) async {
     callCount++;
     return handler(options);
   }
 }
 
-ResponseBody _json(Object body, {int status = 200, Map<String, List<String>>? headers}) {
+ResponseBody _json(Object body,
+    {int status = 200, Map<String, List<String>>? headers}) {
   final bytes = utf8.encode(jsonEncode(body));
   return ResponseBody.fromBytes(
     bytes,
@@ -70,7 +72,8 @@ void main() {
     });
 
     test('second GET served from cache', () async {
-      final adapter = _FakeAdapter((o) async => _json({'status': 'success', 'message': 'ok', 'data': []}));
+      final adapter = _FakeAdapter((o) async =>
+          _json({'status': 'success', 'message': 'ok', 'data': []}));
       final dio = Dio()..httpClientAdapter = adapter;
       final api = ThaiGeoApi(client: ThaiGeoClient(dio: dio));
       await api.listProvinces();
@@ -88,7 +91,10 @@ void main() {
       );
       final dio = Dio()..httpClientAdapter = adapter;
       final api = ThaiGeoApi(client: ThaiGeoClient(dio: dio));
-      await expectLater(api.getProvince('TH99'), throwsA(isA<GeoApiException>().having((e) => e.code, 'code', GeoErrorCode.notFound)));
+      await expectLater(
+          api.getProvince('TH99'),
+          throwsA(isA<GeoApiException>()
+              .having((e) => e.code, 'code', GeoErrorCode.notFound)));
     });
 
     test('retries on 429 then succeeds', () async {
@@ -114,7 +120,8 @@ void main() {
       final api = ThaiGeoApi(
         client: ThaiGeoClient(
           dio: dio,
-          config: const ThaiGeoConfig(maxRetries: 2, baseRetryDelay: Duration(milliseconds: 1)),
+          config: const ThaiGeoConfig(
+              maxRetries: 2, baseRetryDelay: Duration(milliseconds: 1)),
         ),
       );
       final list = await api.listProvinces();

@@ -10,7 +10,8 @@ class MemoryCacheStore implements CacheStore {
   MemoryCacheStore({this.maxEntries = 256});
 
   final int maxEntries;
-  final LinkedHashMap<String, CacheEntry> _store = LinkedHashMap<String, CacheEntry>();
+  final LinkedHashMap<String, CacheEntry> _store =
+      LinkedHashMap<String, CacheEntry>();
 
   @override
   CacheEntry? get(String key) {

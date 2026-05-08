@@ -1,16 +1,20 @@
 # Exclude documentation from the published package
+
 docs/
 
 # Build outputs
+
 /build/
 .dart_tool/
 
 # IDE
-*.iml
-*.ipr
-*.iws
+
+_.iml
+_.ipr
+\*.iws
 .idea/
 
 # Misc
+
 .DS_Store
 /coverage/

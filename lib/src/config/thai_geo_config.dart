@@ -77,20 +77,22 @@ class ThaiGeoConfig {
     Duration? searchStaleTime,
     Duration? reverseStaleTime,
     bool? enableLogging,
-  }) => ThaiGeoConfig(
-    baseUrl: baseUrl ?? this.baseUrl,
-    connectTimeout: connectTimeout ?? this.connectTimeout,
-    receiveTimeout: receiveTimeout ?? this.receiveTimeout,
-    sendTimeout: sendTimeout ?? this.sendTimeout,
-    userAgent: userAgent ?? this.userAgent,
-    maxRetries: maxRetries ?? this.maxRetries,
-    baseRetryDelay: baseRetryDelay ?? this.baseRetryDelay,
-    maxRetryDelay: maxRetryDelay ?? this.maxRetryDelay,
-    staleWhileError: staleWhileError ?? this.staleWhileError,
-    defaultStaleTime: defaultStaleTime ?? this.defaultStaleTime,
-    autocompleteStaleTime: autocompleteStaleTime ?? this.autocompleteStaleTime,
-    searchStaleTime: searchStaleTime ?? this.searchStaleTime,
-    reverseStaleTime: reverseStaleTime ?? this.reverseStaleTime,
-    enableLogging: enableLogging ?? this.enableLogging,
-  );
+  }) =>
+      ThaiGeoConfig(
+        baseUrl: baseUrl ?? this.baseUrl,
+        connectTimeout: connectTimeout ?? this.connectTimeout,
+        receiveTimeout: receiveTimeout ?? this.receiveTimeout,
+        sendTimeout: sendTimeout ?? this.sendTimeout,
+        userAgent: userAgent ?? this.userAgent,
+        maxRetries: maxRetries ?? this.maxRetries,
+        baseRetryDelay: baseRetryDelay ?? this.baseRetryDelay,
+        maxRetryDelay: maxRetryDelay ?? this.maxRetryDelay,
+        staleWhileError: staleWhileError ?? this.staleWhileError,
+        defaultStaleTime: defaultStaleTime ?? this.defaultStaleTime,
+        autocompleteStaleTime:
+            autocompleteStaleTime ?? this.autocompleteStaleTime,
+        searchStaleTime: searchStaleTime ?? this.searchStaleTime,
+        reverseStaleTime: reverseStaleTime ?? this.reverseStaleTime,
+        enableLogging: enableLogging ?? this.enableLogging,
+      );
 }

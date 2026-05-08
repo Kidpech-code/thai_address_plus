@@ -21,7 +21,13 @@ class GeoErrorCode {
 /// - HTTP 4xx/5xx → ใช้ค่าใน envelope `error.code`
 /// - Network/Timeout → ใช้ code ฝั่ง SDK
 class GeoApiException implements Exception {
-  GeoApiException({required this.code, required this.message, this.statusCode, this.retryAfter, this.requestPath, this.cause});
+  GeoApiException(
+      {required this.code,
+      required this.message,
+      this.statusCode,
+      this.retryAfter,
+      this.requestPath,
+      this.cause});
 
   final String code;
   final String message;
@@ -32,8 +38,13 @@ class GeoApiException implements Exception {
 
   bool get isRateLimited => code == GeoErrorCode.rateLimited;
   bool get isNotFound => code == GeoErrorCode.notFound;
-  bool get isRetryable => isRateLimited || (statusCode != null && statusCode! >= 500) || code == GeoErrorCode.network || code == GeoErrorCode.timeout;
+  bool get isRetryable =>
+      isRateLimited ||
+      (statusCode != null && statusCode! >= 500) ||
+      code == GeoErrorCode.network ||
+      code == GeoErrorCode.timeout;
 
   @override
-  String toString() => 'GeoApiException($code, status=$statusCode, path=$requestPath): $message';
+  String toString() =>
+      'GeoApiException($code, status=$statusCode, path=$requestPath): $message';
 }

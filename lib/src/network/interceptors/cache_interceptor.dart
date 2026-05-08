@@ -15,7 +15,8 @@ import '../cache/cache_store.dart';
 /// 4. ถ้ายิงพลาด: หาก [ThaiGeoConfig.staleWhileError] = true และมี stale entry
 ///    → คืน stale แทนที่จะ throw (stale-while-error)
 class CacheInterceptor extends Interceptor {
-  CacheInterceptor({required this.config, required this.store, required this.ttlResolver});
+  CacheInterceptor(
+      {required this.config, required this.store, required this.ttlResolver});
 
   final ThaiGeoConfig config;
   final CacheStore store;
@@ -26,7 +27,8 @@ class CacheInterceptor extends Interceptor {
   static const _ttlKey = '_thai_geo_ttl';
 
   @override
-  Future<void> onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     if (options.method.toUpperCase() != 'GET') return handler.next(options);
 
     final ttl = ttlResolver(options);
@@ -49,9 +51,13 @@ class CacheInterceptor extends Interceptor {
         statusMessage: 'OK (cache)',
         headers: Headers.fromMap({
           'x-thai-geo-cache': ['HIT'],
-          if (entry.contentType != null) Headers.contentTypeHeader: [entry.contentType!],
+          if (entry.contentType != null)
+            Headers.contentTypeHeader: [entry.contentType!],
         }),
-        extra: {'fromCache': true, 'cachedAt': entry.storedAt.toIso8601String()},
+        extra: {
+          'fromCache': true,
+          'cachedAt': entry.storedAt.toIso8601String()
+        },
       );
       return handler.resolve(response);
     }
@@ -60,7 +66,8 @@ class CacheInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onResponse(Response<dynamic> response, ResponseInterceptorHandler handler) async {
+  Future<void> onResponse(
+      Response<dynamic> response, ResponseInterceptorHandler handler) async {
     final options = response.requestOptions;
     if (options.method.toUpperCase() != 'GET') return handler.next(response);
     if (response.extra['fromCache'] == true) return handler.next(response);
@@ -75,7 +82,11 @@ class CacheInterceptor extends Interceptor {
     try {
       await store.set(
         _cacheKey(options),
-        CacheEntry(body: response.data, storedAt: now, staleAt: now.add(ttl), contentType: response.headers.value(Headers.contentTypeHeader)),
+        CacheEntry(
+            body: response.data,
+            storedAt: now,
+            staleAt: now.add(ttl),
+            contentType: response.headers.value(Headers.contentTypeHeader)),
       );
     } catch (_) {
       // store write failed — silently skip caching, response still delivered
@@ -84,7 +95,8 @@ class CacheInterceptor extends Interceptor {
   }
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+      DioException err, ErrorInterceptorHandler handler) async {
     if (!config.staleWhileError) return handler.next(err);
     // ห้ามแทนที่ cancelled request ด้วย stale — caller ต้องได้รับ cancel exception
     if (err.type == DioExceptionType.cancel) return handler.next(err);
@@ -107,7 +119,8 @@ class CacheInterceptor extends Interceptor {
       statusMessage: 'OK (stale)',
       headers: Headers.fromMap({
         'x-thai-geo-cache': ['STALE'],
-        if (entry.contentType != null) Headers.contentTypeHeader: [entry.contentType!],
+        if (entry.contentType != null)
+          Headers.contentTypeHeader: [entry.contentType!],
       }),
       extra: {'fromCache': true, 'stale': true},
     );
@@ -131,7 +144,8 @@ class CacheInterceptor extends Interceptor {
   }
 
   String _cacheKey(RequestOptions options) {
-    final query = options.queryParameters.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
+    final query = options.queryParameters.entries.toList()
+      ..sort((a, b) => a.key.compareTo(b.key));
     final qs = query.map((e) => '${e.key}=${e.value}').join('&');
     return '${options.method} ${options.path}${qs.isEmpty ? '' : '?$qs'}';
   }
