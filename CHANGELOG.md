@@ -2,6 +2,10 @@
 
 All notable changes to this package will be documented in this file.
 
+## 1.0.1
+
+- Compress screenshot images (~64% size reduction, 2.5 MB → 908 KB)
+
 ## 1.0.0
 
 ### Stable release
