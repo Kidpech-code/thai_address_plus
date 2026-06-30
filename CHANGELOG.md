@@ -2,6 +2,14 @@
 
 All notable changes to this package will be documented in this file.
 
+## 1.0.2
+
+- Fix non-exhaustive `DioExceptionType` switch that failed static analysis on
+  dio ≥ 5.10.0 (which added `transformTimeout`). Now uses a version-agnostic
+  `default` branch, restoring pub.dev static-analysis and platform-support scores.
+- Widen dependency constraints for broader compatibility: `dio: ^5.0.0`,
+  `meta: ^1.9.0`.
+
 ## 1.0.1
 
 - Compress screenshot images (~64% size reduction, 2.5 MB → 908 KB)

@@ -130,7 +130,7 @@ class ThaiGeoClient {
       if (res.data is! T) {
         throw GeoApiException(
             code: GeoErrorCode.parse,
-            message: 'Expected ${T}, got ${res.data.runtimeType}',
+            message: 'Expected $T, got ${res.data.runtimeType}',
             requestPath: path);
       }
       return res.data as T;
@@ -244,9 +244,11 @@ class ThaiGeoClient {
             statusCode: status,
             requestPath: path,
             cause: e);
-      case DioExceptionType.badResponse:
-      case DioExceptionType.badCertificate:
-      case DioExceptionType.unknown:
+      // ponytail: default covers badResponse/badCertificate/unknown plus any
+      // future DioExceptionType (e.g. transformTimeout in newer dio) — keeps the
+      // switch exhaustive across the whole 5.x range without naming version-
+      // specific enum values that would break older dio.
+      default:
         return GeoApiException(
           code: code ?? _codeFromStatus(status),
           message: message ?? (e.message ?? 'Unknown error'),
