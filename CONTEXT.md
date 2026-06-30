@@ -2,7 +2,7 @@
 
 Flutter SDK wrapping `api.kidpech.app` — typed access to Thailand's administrative hierarchy (77 provinces, 928 districts, 7,425 sub-districts, villages), reverse geocoding, fuzzy search, autocomplete, spatial queries, and GeoJSON boundaries.
 
-Version: **1.0.3** · Pub: `thai_address_plus` · API: `https://api.kidpech.app/api/v1/geo`
+Version: **1.0.4** · Pub: `thai_address_plus` · API: `https://api.kidpech.app/api/v1/geo`
 
 ## Why this package exists
 

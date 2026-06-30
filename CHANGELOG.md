@@ -2,6 +2,12 @@
 
 All notable changes to this package will be documented in this file.
 
+## 1.0.4
+
+- Raise `dio` lower bound to `^5.2.0` — `DioException`/`DioExceptionType` were
+  introduced in dio 5.2.0, so the previous `^5.0.0` failed pub.dev's
+  dependency-lower-bound (downgrade) analysis. Completes the 160/160 pub score.
+
 ## 1.0.3
 
 - Docs: sync version references (`README.md` install snippet, `CONTEXT.md`) to
