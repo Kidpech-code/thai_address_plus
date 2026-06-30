@@ -35,7 +35,7 @@ Flutter SDK สำหรับ **Thailand Geographic API** — จังหว�
 
 ```yaml
 dependencies:
-  thai_address_plus: ^1.0.2
+  thai_address_plus: ^1.0.3
 ```
 
 ```bash

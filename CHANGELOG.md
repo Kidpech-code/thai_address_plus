@@ -2,6 +2,11 @@
 
 All notable changes to this package will be documented in this file.
 
+## 1.0.3
+
+- Docs: sync version references (`README.md` install snippet, `CONTEXT.md`) to
+  the published release. No code changes.
+
 ## 1.0.2
 
 - Fix non-exhaustive `DioExceptionType` switch that failed static analysis on

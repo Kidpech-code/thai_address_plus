@@ -2,7 +2,7 @@ name: thai_address_plus
 description: >-
   Flutter SDK for Thailand Geographic API with caching, autocomplete,
   and a ready-to-use address search widget.
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/Kidpech-code/thai_address_plus
 repository: https://github.com/Kidpech-code/thai_address_plus
 issue_tracker: https://github.com/Kidpech-code/thai_address_plus/issues
